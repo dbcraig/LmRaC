@@ -1,7 +1,7 @@
 # LmRaC
 LmRaC (Language Model Research Assistant & Collaborator) utilizes an extensible multi-tier RAG design to allow users to inter-
 rogate their own experimental data in the context of an external domain specific scientific knowledge base created interactively from PubMed primary sources.
-<p align="center" style="color:red;font-size:14pt;">** LmRaC is currently in development. If you would like access to the Docker image, please contact the author. **</p>
+** LmRaC is currently in development. If you would like access to the Docker image, please contact the author. **
 ## Prerequisites
 ### Docker
 LmRaC runs as a Docker container. Users must therefore have either [Docker Engine](https://docs.docker.com/engine/install/) (CLI) or [Docker Desktop](https://docs.docker.com/desktop/install/linux-install/) (GUI) installed. If using Docker Desktop, keep in mind that LmRaC is an interactive application and must therefore access the keyboard for user input (i.e., STDIO). If running Docker in the cloud, we recommend a container optimized OS.
