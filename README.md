@@ -1,5 +1,5 @@
 # LmRaC
-Language Model Research Assistant &amp; Collaborator
+## Language Model Research Assistant &amp; Collaborator
 
 ## Installation
 xxx
