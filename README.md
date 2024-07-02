@@ -1,17 +1,18 @@
 # LmRaC
-LmRaC (Language Model Research Assistant & Collaborator) utilizes an extensible multi-tier RAG design to allow users to inter-
-rogate their own experimental data in the context of an external domain specific scientific knowledge base created interactively from PubMed primary sources.
+LmRaC (Language Model Research Assistant & Collaborator) utilizes a functionally extensible multi-tier RAG design to allow users to interrogate their own experimental data in the context of an external domain specific scientific knowledge base created interactively from PubMed primary sources.
 
 **LmRaC is currently in development. If you would like access to the Docker image, please contact the author.**
 
 ## Prerequisites
 ### Docker
 LmRaC runs as a Docker container. Users must therefore have either [Docker Engine](https://docs.docker.com/engine/install/) (CLI) or [Docker Desktop](https://docs.docker.com/desktop/install/linux-install/) (GUI) installed. If using Docker Desktop, keep in mind that LmRaC is an interactive application and must therefore access the keyboard for user input (i.e., STDIO). If running Docker in the cloud, we recommend a container optimized OS.
+
 ### OpenAI
 LmRaC uses OpenAI's API to perform many language related functions. It does, not per se, answer user questions. Instead, it is used to assess the usefulness of primary source material for answering questions. Users of LmRaC must have an active OpenAI API account with an API key (see [Project API keys](https://platform.openai.com/api-keys)). Once a key has been created, it must be passed into the Docker container. This is typically done by creating an environment variable and then passing a reference to this variable in the **docker run** command using the **-e** option.
 ```
 export OPENAI_API_KEY="sk-asdlfjlALJWEasdfLWERLWwwSFSSEwwwww"
 ```
+
 ### Pinecone
 [Pinecone](https://app.pinecone.io/) is vector database used by LmRaC to store and search vector embedding of source material. Users must have an active Pinecone account then [create a Serverless API Key](https://docs.pinecone.io/guides/projects/understanding-projects#api-keys) from the Pinecone console. Once a key has been created, it must be passed into the Docker container. This is typically done by creating an environment variable and then passing a reference to this variable in the **docker run** command using the **-e** option.
 ```
@@ -155,6 +156,7 @@ Note that it is not unusual for GPT4 to assess final answers as poor. Most often
 ---
 ## How To Cite
 *Coming Soon!*
+
 ## Contact
-Douglas Craig : dbcraig@wayne.edu
+Douglas Craig : craigdou@med.umich.edu
 
