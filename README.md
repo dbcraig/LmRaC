@@ -39,10 +39,13 @@ docker pull dbcraig/lmrac:latest
 Run LmRaC using Docker. Pass API keys for OpenAI and Pinecone and mount the local directory (e.g., \$PWD) to the LmRaC /app/user directory. The local directory is where user experiments are found and to where all logs and output will be written.
 
 ```         
-docker run -m1024m -it -e OPENAI_API_KEY=${OPENAI_API_KEY} -e PINECONE_API_KEY=\${PINECONE_API_KEY} -v \$(PWD)/work:/app/user lmracv:0.1.0
+cd <your-lmrac-root>
+docker run -m1024m -it -e OPENAI_API_KEY=${OPENAI_API_KEY} -e PINECONE_API_KEY=${PINECONE_API_KEY} -v $(pwd)/work:/app/user -v /etc/localtime:etc/localtime:ro -p 5000:5000 dbcraig/lmrac
 ```
 
-Once running you should see:
+Open LmRaC in your browser: <http://localhost:5000>
+
+![](img/LmRaC_init.png)
 
 ```         
 LmRaC - Language Model Research Assistant & Collaborator Copyright (c) 2023-2024 Douglas B. Craig. All rights reserved. v0.1.0 24-Apr-2024
@@ -110,7 +113,39 @@ Exit LmRaC by typing "bye" or "exit" or "adios" or...
 
 ------------------------------------------------------------------------
 
-## Configuration
+## LmRaC Homepage
+
+xxx ![](img/LmRaC_callout.png)
+
+------------------------------------------------------------------------
+
+## Indexes
+
+xxx
+
+------------------------------------------------------------------------
+
+## Experiments
+
+xxx
+
+------------------------------------------------------------------------
+
+## Functions
+
+xxx
+
+------------------------------------------------------------------------
+
+## Answers
+
+xxx ![](img/LmRaC_Answers.png)
+
+xxx ![](img/LmRaC_Answers_save.png)
+
+------------------------------------------------------------------------
+
+## Configuration {#configuration}
 
 If no user configuration is supplied, LmRaC will use the following defaults:
 
@@ -122,6 +157,14 @@ Vocabularies Directory  : /app/user/vocab/
 ```
 
 In addition, default vocabulary files for genes, diseases and pathways will be copied into the vocab/ folder.
+
+### Markdown Viewing
+
+LmRaC answers use [standard Markdown](https://www.markdownguide.org/getting-started/) to improve readability and add hyperlinks (e.g., to citations). Although you can use a dedicated Markdown editor or note-taking application to view LmRaC answers, you can also use a browser extension/add-on to automatically render Markdown in your favorite browswer.
+
+[Markdown Viewer](https://github.com/simov/markdown-viewer) is a browser extension compatible with all major browsers. Follow the simple install instructions for your browser then from ADVANCED OPTIONS for the extension [enable Site Access](https://github.com/simov/markdown-viewer?tab=readme-ov-file#enable-site-access) for the LmRaC URL:
+
+![](img/MarkdownViewer.png)
 
 ------------------------------------------------------------------------
 
@@ -145,37 +188,63 @@ When a term is not recognized (i.e., no embedding has the identifier as metadata
 
 ### Tips
 
-> [!TIP] Do not feel you must populate an index with hundreds of articles. Often, answers require only a few articles. Since searches return results sorted by relevance, it is often sufficient to only download 10 of the best citations to answer common questions.
+> **What's Enough?** Do not feel you must populate an index with hundreds of articles. Often, answers require only a few articles. Since searches return results sorted by relevance, it is often sufficient to only download 10 of the best citations to answer common questions.
 
-> [!TIP] When asking a question about pathways in particular, explicitly mention the pathway. For example, "How is smoking related to the NSCLC pathway?" is more likely to reference both the pathway for NSCLC (KEGG [hsa0522](https://www.genome.jp/pathway/hsa05223)) and the disease (MeSH [D002289](https://meshb.nlm.nih.gov/record/ui?ui=D002289)).
+> **Pathway References:** When asking a question about pathways in particular, explicitly mention the pathway. For example, "How is smoking related to the NSCLC pathway?" is more likely to reference both the pathway for NSCLC (KEGG [hsa0522](https://www.genome.jp/pathway/hsa05223)) and the disease (MeSH [D002289](https://meshb.nlm.nih.gov/record/ui?ui=D002289)).
 
-> [!TIP] More detailed answers aren't always better. Since the requested complexity (i.e., detail) determines the number of sub-questions generated, detail should be correlated with the complexity of the question, otherwise LmRaC will likely generate significantly redundant answers. Ask for more detail when there are expected implicit questions in the original question.
+> **How Detailed?** More detailed answers aren't always better. Since the requested complexity (i.e., detail) determines the number of sub-questions generated, detail should be correlated with the complexity of the question, otherwise LmRaC will likely generate significantly redundant answers. Ask for more detail when there are expected implicit questions in the original question.
 
 ------------------------------------------------------------------------
 
 ## Usage: Experiments
 
-*Coming Soon!*
+xxx
+
+------------------------------------------------------------------------
+
+## Usage: User-Defined Functions
+
+xxx
+
+### Setting up the REST API Server
+
+Clone the base REST API server from this GitHub repository, then build the Docker image for the functions server.
+
+```         
+git clone https://github.com/dbcraig/LmRaC.git
+docker build -t lmracrest:latest .
+```
+
+Run the functions REST API server:
+
+```         
+cd <your-lmrac-root>
+docker run -it -v $(pwd)/work:/app/user -p 5001:5001 lmracrest
+```
+
+When the server starts up it will show the IP:port on which it is running.
+
+LmRaC must know this IP:port in order to make function requests. You can edit the LmRaC.config file (see [Configuration](#Configuration)) so that the *functionsREST* key value is set to IP:port (e.g., "172.17.0.2:5001") or you can set the IP:port dynamically be asking LmRaC to set the value (e.g., "Please set the functions REST API IP and port to 172.17.0.2:5001")
+
+### Adding Functions
+
+xxx
+
+### Using Functions
+
+xxx Load the function ... it will be used based on the description
 
 ------------------------------------------------------------------------
 
 ## Troubleshooting
 
-### Memory
+> **Memory:** Because LmRaC uses multiprocessing extensively, complex questions can require significant memory resources while documents are being processed. We recommend a minimum of 1GB for the Docker container, though 2GB may be necessary for large multi-part questions. The error **A process in the process pool was terminated abruptly while the future was running or pending** is usually an indication that LmRaC ran out of memory.
 
-Because LmRaC uses multiprocessing extensively, complex questions can require significant memory resources while documents are being processed. We recommend a minimum of 1GB for the Docker container, though 2GB may be necessary for large multi-part questions. The error **A process in the process pool was terminated abruptly while the future was running or pending** is usually an indication that LmRaC ran out of memory.
+> **Interaction:** Though LmRaC can be run in any Docker environment, it is an interactive application. The error **EOFError: EOF when reading a line** indicates the container is running in a non-interactive mode.
 
-### Interaction
+> **Rate Limits:** All servers have rate limits (i.e., maximum number of requests per second). In the case of PubMed this is fix. For OpenAI this increases over time for users. In all cases LmRaC will retry a request in the event of a rate limit error. Retries employ an exponential backoff strategy that, in most cases, is sufficient for the request to ultimately succeed. As a consequence, users may see slower response times when using LmRaC with a new OpenAI account.
 
-Though LmRaC can be run in any Docker environment, it is an interactive application. The error **EOFError: EOF when reading a line** indicates the container is running in a non-interactive mode.
-
-### Rate Limits
-
-All servers have rate limits (i.e., maximum number of requests per second). In the case of PubMed this is fix. For OpenAI this increases over time for users. In all cases LmRaC will retry a request in the event of a rate limit error. Retries employ an exponential backoff strategy that, in most cases, is sufficient for the request to ultimately succeed. As a consequence, users may see slower response times when using LmRaC with a new OpenAI account.
-
-### Low Assessment Scores
-
-Note that it is not unusual for GPT4 to assess final answers as poor. Most often this is due to two factors: (1) GPT4 flags citations as "fake" because they occur after the training cutoff date of GPT4; or, (2) GPT4 objects to the complexity of the answer as exceeding the scope of the original question, or inappropriate for a lay audience. On the other hand, these assessment often offer insightful critiques that may prompt further questions.
+> **Low Assessment Scores:** Note that it is not unusual for GPT4 to assess final answers as poor. Most often this is due to two factors: (1) GPT4 flags citations as "fake" because they occur after the training cutoff date of GPT4; or, (2) GPT4 objects to the complexity of the answer as exceeding the scope of the original question, or inappropriate for a lay audience. On the other hand, these assessment often offer insightful critiques that may prompt further questions.
 
 ------------------------------------------------------------------------
 
