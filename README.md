@@ -145,7 +145,7 @@ xxx ![](img/LmRaC_Answers_save.png)
 
 ------------------------------------------------------------------------
 
-## Configuration {#configuration}
+## Configuration
 
 If no user configuration is supplied, LmRaC will use the following defaults:
 
@@ -224,7 +224,7 @@ docker run -it -v $(pwd)/work:/app/user -p 5001:5001 lmracrest
 
 When the server starts up it will show the IP:port on which it is running.
 
-LmRaC must know this IP:port in order to make function requests. You can edit the LmRaC.config file (see [Configuration](#Configuration)) so that the *functionsREST* key value is set to IP:port (e.g., "172.17.0.2:5001") or you can set the IP:port dynamically be asking LmRaC to set the value (e.g., "Please set the functions REST API IP and port to 172.17.0.2:5001")
+LmRaC must know this IP:port in order to make function requests. You can edit the LmRaC.config file (see [Configuration](#configuration)) so that the *functionsREST* key value is set to IP:port (e.g., "172.17.0.2:5001") or you can set the IP:port dynamically be asking LmRaC to set the value (e.g., "Please set the functions REST API IP and port to 172.17.0.2:5001")
 
 ### Adding Functions
 
