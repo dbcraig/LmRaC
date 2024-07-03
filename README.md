@@ -4,9 +4,9 @@ LmRaC (Language Model Research Assistant & Collaborator) is an LLM-based web app
 
 -   incrementally building custom knowledge bases from the scientific literature, and
 
--   adding custom functions to make quantitative data available to the language model
+-   using custom functions to make quantitative data available to the language model.
 
-LmRaC uses a multi-tier retrieval-augmented generation (RAG) design to index: domain knowledge, experimental context and experimental results. LmRaC is fully data-aware through the use of a user-defined REST API that allows the LLM to ask questions about data.
+LmRaC uses a multi-tier retrieval-augmented generation (RAG) design to index: domain knowledge, experimental context and experimental results. LmRaC is fully data-aware through the use of a user-defined REST API that allows the LLM to ask questions about data and results.
 
 ------------------------------------------------------------------------
 
@@ -68,7 +68,7 @@ export PINECONE_API_KEY="2368ff63-8a81-43e3-9fd5-46e892b9d1b3"
 
 ## Quick Start
 
-Pull the latest tagged image from Docker Hub. Run LmRaC using Docker Engine. If Docker is not installed or you're using Docker Desktop, see the [Installation](#Installation) instructions below.
+Pull the latest tagged image from Docker Hub. Run LmRaC using Docker Engine (if Docker is not installed or you're using Docker Desktop, see the [Installation](#Installation) instructions below). You'll need to pass API keys for OpenAI and Pinecone and mount your local directory (e.g., \$PWD) to the LmRaC /app/user directory. The local directory is where user experiments are found and to where all LmRaC logs and output will be written.
 
 ```         
 docker pull dbcraig/lmrac:latest
@@ -76,27 +76,32 @@ cd <your-lmrac-root>
 docker run -m1024m -it -e OPENAI_API_KEY=${OPENAI_API_KEY} -e PINECONE_API_KEY=${PINECONE_API_KEY} -v $(pwd)/work:/app/user -v /etc/localtime:etc/localtime:ro -p 5000:5000 dbcraig/lmrac
 ```
 
-Pass API keys for OpenAI and Pinecone and mount your local directory (e.g., \$PWD) to the LmRaC /app/user directory. The local directory is where user experiments are found and to where all logs and output will be written.
-
-Open LmRaC in your browser: <http://localhost:5000>
+Open LmRaC in your browser: <http://localhost:5000> Typically, the port is 5000, but depending on your Docker configuration and what else is running on your host, this may be different (e.g., 55001 for Docker Desktop).
 
 ![](img/LmRaC_init.png)
 
-LmRaC will initialize and report any problems. The first time you run LmRaC will use a default configuration and save it in the mounted work folder's config/ directory. See [Configuration](#Configuration) below for how to customize the configuration. When you quit LmRaC your current configuration is re-saved.
+LmRaC will initialize and report any problems. The first time you run LmRaC will use a default configuration. See [Configuration](#Configuration) below for how to customize the configuration. When you quit LmRaC your current configuration is saved to LmRaC.config in the the mounted config/ folder.
 
 ### Creating an Index
 
-All questions are answered relative to a index of source material. So, set an index in Pinecone to store embeddings of the sources. If the index does not exist, you'll be asked to create it. LmRaC will indicate how many paragraphs of information are currently stored in the index. Note: the command to set the index is in natural language, so you can use: "set index to test1" or "index = test1" or anything that indicates you want to set the index.
+All questions are answered relative to a index of source material. So, set an index in Pinecone to store embeddings of the sources. If the index does not exist, you'll be asked to create it. LmRaC will indicate how many paragraphs of information are currently stored in the index. Note: the command to set the index is in natural language, so you can ask something like: "Set index to test1" or "index = test1" or anything that indicates you want to set the index.
 
 ```         
-[LmRaC] How can I help you? \>\> set index to test1
-
-RAGdom : test1 (28810) RAGexp : test1-exp (0) [LmRaC] The current index has been set to 'test1'.
+[user]  set index to test1
+[LmRaC] The current index has been set to 'test1'.
+Index sizes are:
+RAGdom : test1 (28810) 
+RAGexp : test1-exp (123) 
 ```
+
+Each index has two parts: 
+
+- **RAGdom** the general domain knowledge index for primary material (e.g., PubMed articles)
+- **RAGexp** the experiment specific index for secondary material (e.g., saved answers, protocols, background/context knowledge)
 
 ### Asking questions and populating your Index
 
-Ask a question. LmRaC will analyze the question for any mention of genes, diseases or pathways. It will summarize what it finds as the Search Context. If the index contains information about any of these items, you will be given the option of updating the index (i.e., searching for more documents). If the index does not include information about one or more item in the question, it will initiate a search of PubMed.
+Ask a question. LmRaC will analyze the question for any mention of genes, diseases or pathways. It will summarize what it finds as the Search Context. If the index already contains information about any of these items, you will be given the option of updating the index (i.e., searching for more documents). If the index does not include information about one or more item in the question, it will initiate a search of PubMed.
 
 ```         
 [LmRaC] How can I help you? \>\> what is tp53? How detailed an answer would you like (1-7)?
@@ -124,13 +129,17 @@ References exist for pathway 'p53 signaling pathway'. Skip download from PubMed?
 
 ### Viewing Answers
 
-Answers are displayed during processing and stored in the sessions/finalAnswers/ directory along with information about the original query, generated sub-queries, references for the answer and a GPT4 assessment of the final answer.
+Answers are displayed during processing and saved in the sessions/finalAnswers/ directory along with information about the original query, generated sub-queries, references for the answer and a GPT4 assessment of the final answer.
+
+To view the final answer (and its quality assessment) open the Answers window by clicking on the Answers icon of the LmRaC homepage ([LmRaC Homepage](#LmRaC-Homepage)). From the Answers window answers can be viewed as markdown, HTML, downloaded and saved to experiments as supplemental experiment documents.
 
 ### Quitting LmRaC
 
 Exit LmRaC by typing "bye" or "exit" or "adios" or whatever language you prefer. You will be given the option to save your current configuration. This includes your current index, experiment and any loaded functions. ONce you exit the Docker container will shutdown and exit.
 
 ### Next steps
+
+Once you've asked some questions and received answers, you'll probably want to setup experiments into which you can upload quantitative results. You can then use functions to access this data as part of your questions!
 
 #### Experiments & Data
 
@@ -178,7 +187,7 @@ xxx
 
 4.  **Run:** xxx
 
-![](img/DockerDesktop_Run)
+![](img/DockerDesktop_Launch)
 
 xxx
 
@@ -205,7 +214,7 @@ The LmRaC homepage allows the user to interact with LmRaC as well as open sub-wi
 ### Commands
 Although the user input area is typically used to ask questions, it can also be used to enter commands. LmRac understands the following commands:
 
-- **Help** xxx
+- **Help**
   - **General** xx
   - **Indexes** xx
   - **Experiments** xx
@@ -239,11 +248,19 @@ Note that commands should be asked one at a time. Also, LmRaC currently does not
 
 ## Indexes
 
+The Indexes window can be opened by clicking on the Indexes button on the [LmRaC Homepage](#LmRaC-Homepage).
+
+![](img/LmRaC_Indexes.png)
+
 xxx
 
 ------------------------------------------------------------------------
 
 ## Experiments
+
+The Experiments window can be opened by clicking on the Experiments button on the [LmRaC Homepage](#LmRaC-Homepage).
+
+![](img/LmRaC_Experiments.png)
 
 xxx
 
@@ -251,13 +268,19 @@ xxx
 
 ## Functions
 
+The Functions window can be opened by clicking on the Functions button on the [LmRaC Homepage](#LmRaC-Homepage).
+
+![](img/LmRaC_Functions.png)
+
 xxx
 
 ------------------------------------------------------------------------
 
 ## Answers
 
-xxx ![](img/LmRaC_Answers.png)
+The Answers window can be opened by clicking on the Answers icon on the [LmRaC Homepage](#LmRaC-Homepage).
+
+![](img/LmRaC_Answers.png)
 
 1. **Search** can be used to select only answers with the specified text in either the question or the answer (search is case insensitive).
 2. **Timestamp** shows the date and time of the session an answer was created along with a sequence number for the anwer within that session.
@@ -269,7 +292,9 @@ xxx ![](img/LmRaC_Answers.png)
 8. **Test Tube** icon is used to select answers for saving to experiments.
 9. **Download** icon is used to download the full text of the answer as a markdown document.
 
-xxx ![](img/LmRaC_Answers_save.png)
+Once you select one or more answers (by clicking on the test tube), the answers save dialog opens in the Answers window.
+
+![](img/LmRaC_Answers_save.png)
 
 **Select Answers:** Click on the test tube next to the answer you want to add. The test tube will be highlighted with a check mark. You may select as many answers as you wish (see Red highlight).
 
