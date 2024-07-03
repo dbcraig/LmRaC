@@ -21,9 +21,9 @@ LmRaC uses a multi-tier retrieval-augmented generation (RAG) design to index: do
 * [Functions](#Functions)
 * [Answers](#Answers)
 * [Configuration](#Configuration)
-* [Usage: Q & A](#Usage---Q-&-A)
+* [Usage: Q & A](#Usage---Q-and-A)
 * [Usage: Experiments](#Usage---Experiments)
-* [Usage: User-Defined Functions](#Usage--User-Defined-Functions)
+* [Usage: User-Defined Functions](#Usage---User-Defined-Functions)
 * [Indexes and Experiments and Functions](#Indexes-and-Experiments-and-Functions)
 * [Troubleshooting](#Troubleshooting)
 * [How To Cite](#How-To-Cite)
@@ -175,19 +175,54 @@ xxx
 
 ## LmRaC Homepage
 
-xxx ![](img/LmRaC_callout.png)
+The LmRaC homepage allows the user to interact with LmRaC as well as open sub-windows for experiments, indexes, functions and saved answers.
 
-1.  xx
-2.  xx
-3.  xx
-4.  xx
-5.  xx
-6.  xx
-7.  xx
-8.  xx
-9.  xx
-10. xx
-11. xx
+![](img/LmRaC_callout.png)
+
+1.  **LmRaC message area** shows all messages from LmRaC as well as user commands and questions.
+2.  **User input area** is where the user initiates questions and command to LmRaC.
+3.  **Submit** button sends the user input to LmRaC.
+4.  **Submit on ENTER** checkbox allows the user to send input simply by pressing the Enter key in the user input area (same as clicking on the Submit button).
+5.  **Help** button prompts the user to type "help" in the user input area.
+6.  **Erase** button clears the LmRaC message area.
+7.  **Download** button allows the user to download the entire contents of the LmRaC message area to a file.
+8.  **Answers** icon opens the Answers window from which all saved answers can be viewed.
+9.  **Experiments** button opens the Experiments window which shows all available experiments.
+10. **Indexes** button opens the Indexes window which shows all available indexes.
+11. **Functions** button opens the Functions window which shows all available function libraries.
+
+### Commands
+Although the user input area is typically used to ask questions, it can also be used to enter commands. LmRac understands the following commands:
+
+- **Help** xxx
+  - **General** xx
+  - **Indexes** xx
+  - **Experiments** xx
+  - **Functions** xx
+  - **Questions** xx
+  - **Examples** xx
+- **General Questions** xx
+- **Experiment Questions** xx
+- **Indexes**
+  - **Set Current Index** xx
+  - **Show Current Index** xx
+  - **List Indexes** xx
+- **Experiments**
+  - **Set Current Experiment** xx
+  - **Show Current Experiment** xx
+  - **List Experiments** xx
+- **Functions**
+  - **Load Function** xx
+  - **Unload Function** xx
+  - **List Available Functions** xx
+  - **List Loaded Functions** xx
+  - **Set REST API IP** xx
+- **Show Configuration** xx
+- **Load Experiment Documents** xx
+- **Enable/Disable Debug Messages** xxx
+- **Quit** xx
+
+Note that commands should be asked one at a time. Also, LmRaC currently does not remember previous commands or questions.
 
 ------------------------------------------------------------------------
 
@@ -213,22 +248,50 @@ xxx
 
 xxx ![](img/LmRaC_Answers.png)
 
+1. **Search** can be used to select only answers with the specified text in either the question or the answer (search is case insensitive).
+2. **Timestamp** shows the date and time of the session an answer was created along with a sequence number for the anwer within that session.
+3. **Question** text shows the original question.
+4. **Answer Summary** can be shown by hovering over the info icon.
+5. **Assessment** of the qualify of a general question (not experiment questions) can be shown by hovering over the ribbon icon.
+6. **MD** button opens the full text of the answer as a markdown document. See [Markdown Viewing](#Markdown-Viewing) for how to setup your browser to automatically display markdown.
+7. **HTML** button opens the full text of the answer as an HTML document.
+8. **Test Tube** icon is used to select answers for saving to experiments.
+9. **Download** icon is used to download the full text of the answer as a markdown document.
+
 xxx ![](img/LmRaC_Answers_save.png)
+
+**Select Answers:** Click on the test tube next to the answer you want to add. The test tube will be highlighted with a check mark. You may select as many answers as you wish (see Red highlight).
+
+1. Select the destination experiment name (the current experiment, if any, will have an '*' next to its name).
+2. Select the index for the document embeddings. Remember that these documents will only be searchable when this index set as current.
+3. Once both the experiment and index have been selected, click on the copy documents icon.
+
+Answers are copied to the experiment and added to the index (i.e., embeddings computed) in the background. This typically takes less than a minute to complete.
 
 ------------------------------------------------------------------------
 
 ## Configuration
 
-If no user configuration is supplied, LmRaC will use the following defaults:
+If no user configuration is supplied, LmRaC will use the following defaults. Note that the root /app/user/ is how the container sees your mounted volume. So, if ~/my-directory/lmrac-work/ is mounted when starting Docker, this will be /app/user/
 
 ```         
 Session Logs Directory  : /app/user/sessions/
 Final Answers Directory : /app/user/sessions/finalAnswers/
 Experiments Directory   : /app/user/experiments/
 Vocabularies Directory  : /app/user/vocab/
+Functions Directory     : /app/user/
+Indexes Directory       : /app/user/
+Vocab Directory         : /app/user/
+  Vocab Genes           : hgnc_complete_set.symbol.name.entrez.ensembl.uniprot.tsv
+  Vocab Pathways        : KEGG.pathways.refs.csv
+  Vocab Diseases        : MESH.diseases.csv
+
+Functions REST API IP   : 172.17.0.2:5001
 ```
 
 In addition, default vocabulary files for genes, diseases and pathways will be copied into the vocab/ folder.
+
+When quitting LmRaC the configuration is saved to config/LmRaC.config
 
 ### Markdown Viewing
 
@@ -240,7 +303,7 @@ LmRaC answers use [standard Markdown](https://www.markdownguide.org/getting-star
 
 ------------------------------------------------------------------------
 
-## Usage - Q & A
+## Usage - Q and A
 
 LmRaC is specifically designed to answer questions regarding genes, disease and biological pathways. It does this by searching [NIH PubMed](https://pubmed.ncbi.nlm.nih.gov/) for related journal articles. Articles are indexed using text embedding and tagged with metadata corresponding to their search (e.g., KEGG, MeSH or gene identifiers). \### Setting an Index
 
