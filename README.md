@@ -21,9 +21,9 @@ LmRaC uses a multi-tier retrieval-augmented generation (RAG) design to index: do
 * [Functions](#Functions)
 * [Answers](#Answers)
 * [Configuration](#Configuration)
-* [Usage: Q & A](#Usage:-Q-&-A)
-* [Usage: Experiments](#Usage:-Experiments)
-* [Usage: User-Defined Functions](#Usage:-User-Defined-Functions)
+* [Usage: Q & A](#Usage---Q-&-A)
+* [Usage: Experiments](#Usage---Experiments)
+* [Usage: User-Defined Functions](#Usage--User-Defined-Functions)
 * [Indexes and Experiments and Functions](#Indexes-and-Experiments-and-Functions)
 * [Troubleshooting](#Troubleshooting)
 * [How To Cite](#How-To-Cite)
@@ -121,11 +121,11 @@ Exit LmRaC by typing "bye" or "exit" or "adios" or whatever language you prefer.
 
 ### Next steps
 
-#### Experiments
+#### Experiments & Data
 
 Creating experiments Using experiment documents
 
-#### Functions
+#### Using Functions
 
 xxx
 
@@ -217,7 +217,7 @@ xxx ![](img/LmRaC_Answers_save.png)
 
 ------------------------------------------------------------------------
 
-## Configuration {#configuration}
+## Configuration
 
 If no user configuration is supplied, LmRaC will use the following defaults:
 
@@ -240,7 +240,7 @@ LmRaC answers use [standard Markdown](https://www.markdownguide.org/getting-star
 
 ------------------------------------------------------------------------
 
-## Usage: Q & A
+## Usage - Q & A
 
 LmRaC is specifically designed to answer questions regarding genes, disease and biological pathways. It does this by searching [NIH PubMed](https://pubmed.ncbi.nlm.nih.gov/) for related journal articles. Articles are indexed using text embedding and tagged with metadata corresponding to their search (e.g., KEGG, MeSH or gene identifiers). \### Setting an Index
 
@@ -268,7 +268,7 @@ When a term is not recognized (i.e., no embedding has the identifier as metadata
 
 ------------------------------------------------------------------------
 
-## Usage: Experiments
+## Usage - Experiments
 
 ### Experimental Results
 
@@ -288,7 +288,7 @@ xxx Using the LmRaC interface to load ... so embeddings are created
 
 ------------------------------------------------------------------------
 
-## Usage: User-Defined Functions
+## Usage - User-Defined Functions
 
 xxx
 
