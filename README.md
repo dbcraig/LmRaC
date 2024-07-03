@@ -1,12 +1,41 @@
-# LmRaC
+![](img/LmRaC_3.png)
 
-LmRaC (Language Model Research Assistant & Collaborator) utilizes a functionally extensible multi-tier RAG design to allow users to interrogate their own experimental data in the context of an external domain specific scientific knowledge base created interactively from PubMed primary sources.
+LmRaC (Language Model Research Assistant & Collaborator) is an LLM-based web application that enables users to explore, understand and interrogate their own biological experiments by:
+
+-   incrementally building custom knowledge bases from the scientific literature, and
+
+-   adding custom functions to make quantitative data available to the language model
+
+LmRaC uses a multi-tier retrieval-augmented generation (RAG) design to index: domain knowledge, experimental context and experimental results. LmRaC is fully data-aware through the use of a user-defined REST API that allows the LLM to ask questions about data.
+
+------------------------------------------------------------------------
+
+## Table of Contents
+
+* [Prerequisites](#Prerequisites)
+* [Quick Start](#Quick-Start)
+* [Installation](#Installation)
+* [LmRaC Homepage](#LmRaC-Homepage)
+* [Indexes](#Indexes)
+* [Experiments](#Experiments)
+* [Functions](#Functions)
+* [Answers](#Answers)
+* [Configuration](#Configuration)
+* [Usage: Q & A](#Usage:-Q-&-A)
+* [Usage: Experiments](#Usage:-Experiments)
+* [Usage: User-Defined Functions](#Usage:-User-Defined-Functions)
+* [Indexes and Experiments and Functions](#Indexes-and-Experiments-and-Functions)
+* [Troubleshooting](#Troubleshooting)
+* [How To Cite](#How-To-Cite)
+* [Contact](#Contact)
+
+------------------------------------------------------------------------
 
 ## Prerequisites
 
 ### Docker
 
-LmRaC runs as a web application in a Docker container. Users must therefore have either [Docker Engine](https://docs.docker.com/engine/install/) (CLI) or [Docker Desktop](https://docs.docker.com/desktop/install/linux-install/) (GUI) installed. If running Docker in the cloud, we recommend a container optimized OS.
+LmRaC runs as a web application in a Docker container. Users must therefore have either [Docker Engine](https://docs.docker.com/engine/install/) (CLI) or [Docker Desktop](https://docs.docker.com/desktop/install/linux-install/) (GUI) installed. If running Docker in the cloud, we recommend a container optimized OS. See [Installation](#Installation) below for details on installing Docker.
 
 ### OpenAI
 
@@ -87,28 +116,59 @@ References exist for pathway 'p53 signaling pathway'. Skip download from PubMed?
 Answers are displayed during processing and stored in the sessions/finalAnswers/ directory along with information about the original query, generated sub-queries, references for the answer and a GPT4 assessment of the final answer.
 
 ### Quitting LmRaC
+
 Exit LmRaC by typing "bye" or "exit" or "adios" or whatever language you prefer. You will be given the option to save your current configuration. This includes your current index, experiment and any loaded functions. ONce you exit the Docker container will shutdown and exit.
 
 ### Next steps
 
 #### Experiments
-Creating experiments
-Using experiment documents
+
+Creating experiments Using experiment documents
 
 #### Functions
+
 xxx
 
----
+------------------------------------------------------------------------
 
 ## Installation
-LmRaC is a containerized web application. That means, everything you need to "install" and run LmRaC is packaged into a Docker container. This means the only thing you need to install is Docker on any operating system. Once Docker is installed you simply "pull" the latest LmRaC release from [DockerHub](https://hub.docker.com/) and run it from Docker. That's it! No worrying about installing the correct version of Python or this or that library. It's all in the container!
+
+LmRaC is a containerized web application. That means, everything you need to "install" and run LmRaC is packaged into a Docker container. So, the only thing you need for any operating system is Docker . Once Docker is installed you simply "pull" the latest LmRaC release from [DockerHub](https://hub.docker.com/) and run it from Docker. That's it! No worrying about installing the correct version of Python or this or that library. It's all in the container!
 
 If you're running on Linux then you have the option of installing the command-line version of Docker known as Docker Engine (aka Docker CE), otherwise you'll install Docker Desktop.
 
 ### Docker Engine (Linux)
+
+xxx
+
+```         
+docker pull dbcraig/lmrac:latest
+cd <your-lmrac-root>
+docker run -m1024m -it -e OPENAI_API_KEY=${OPENAI_API_KEY} -e PINECONE_API_KEY=${PINECONE_API_KEY} -v $(pwd)/work:/app/user -v /etc/localtime:etc/localtime:ro -p 5000:5000 dbcraig/lmrac
+```
+
 xxx
 
 ### Docker Desktop (Linux / Mac / Windows)
+
+xxx
+
+1.  **Search:** From the main Search bar search for *dbcraig/lmrac:latest* and then click on Pull. This will copy the latest release of LmRaC to your local machine.
+
+![](img/DockerDesktop_Pull)
+
+2.  **Images:** You should now see the dbcraig/lmrac:latest image in the Images view. Highlight this image and click on the Run icon under Actions.
+
+![](img/DockerDesktop_Run)
+
+3.  **Optional settings:** Before running the image set the parameters so that LmRaC has API keys and knows where to find your data.
+
+![](img/DockerDesktop_Settings)
+
+4.  **Run:** xxx
+
+![](img/DockerDesktop_Run)
+
 xxx
 
 ------------------------------------------------------------------------
@@ -116,6 +176,18 @@ xxx
 ## LmRaC Homepage
 
 xxx ![](img/LmRaC_callout.png)
+
+1.  xx
+2.  xx
+3.  xx
+4.  xx
+5.  xx
+6.  xx
+7.  xx
+8.  xx
+9.  xx
+10. xx
+11. xx
 
 ------------------------------------------------------------------------
 
@@ -145,7 +217,7 @@ xxx ![](img/LmRaC_Answers_save.png)
 
 ------------------------------------------------------------------------
 
-## Configuration
+## Configuration {#configuration}
 
 If no user configuration is supplied, LmRaC will use the following defaults:
 
@@ -199,18 +271,20 @@ When a term is not recognized (i.e., no embedding has the identifier as metadata
 ## Usage: Experiments
 
 ### Experimental Results
-xxx
-DEG example
+
+xxx DEG example
 
 ### Creating an experimental context
+
 xxx
 
 #### Saving Answers to Experiments
+
 saving answers to experiment from Answers dialog
 
 #### Manual upload
-xxx
-Using the LmRaC interface to load ... so embeddings are created
+
+xxx Using the LmRaC interface to load ... so embeddings are created
 
 ------------------------------------------------------------------------
 
@@ -246,15 +320,15 @@ xxx
 
 xxx Load the function ... it will be used based on the description
 
----
+------------------------------------------------------------------------
 
 ## Indexes and Experiments and Functions
+
 Indexes are purposely independent of Experiments.
 
 Functions are purposely independent of Experiments.
 
-With flexibility comes responsibility.
-xxx
+With flexibility comes responsibility. xxx
 
 ------------------------------------------------------------------------
 
