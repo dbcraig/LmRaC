@@ -175,19 +175,19 @@ xxx
 
 1.  **Search:** From the main Search bar search for *dbcraig/lmrac:latest* and then click on Pull. This will copy the latest release of LmRaC to your local machine.
 
-![](img/DockerDesktop_Pull)
+![](img/DockerDesktop_Pull.png)
 
 2.  **Images:** You should now see the dbcraig/lmrac:latest image in the Images view. Highlight this image and click on the Run icon under Actions.
 
-![](img/DockerDesktop_Run)
+![](img/DockerDesktop_Run.png)
 
 3.  **Optional settings:** Before running the image set the parameters so that LmRaC has API keys and knows where to find your data.
 
-![](img/DockerDesktop_Settings)
+![](img/DockerDesktop_Settings.png)
 
 4.  **Run:** xxx
 
-![](img/DockerDesktop_Launch)
+![](img/DockerDesktop_Launch.png)
 
 xxx
 
