@@ -2,8 +2,6 @@
 
 LmRaC (Language Model Research Assistant & Collaborator) utilizes a functionally extensible multi-tier RAG design to allow users to interrogate their own experimental data in the context of an external domain specific scientific knowledge base created interactively from PubMed primary sources.
 
-**LmRaC is currently in development. If you would like access to the Docker image, please contact the author.**
-
 ## Prerequisites
 
 ### Docker
@@ -30,43 +28,23 @@ export PINECONE_API_KEY="2368ff63-8a81-43e3-9fd5-46e892b9d1b3"
 
 ## Quick Start
 
-Pull the latest tagged image from Docker Hub.
+Pull the latest tagged image from Docker Hub. Run LmRaC using Docker Engine. If Docker is not installed or you're using Docker Desktop, see the [Installation](#Installation) instructions below.
 
 ```         
 docker pull dbcraig/lmrac:latest
-```
-
-Run LmRaC using Docker. Pass API keys for OpenAI and Pinecone and mount the local directory (e.g., \$PWD) to the LmRaC /app/user directory. The local directory is where user experiments are found and to where all logs and output will be written.
-
-```         
 cd <your-lmrac-root>
 docker run -m1024m -it -e OPENAI_API_KEY=${OPENAI_API_KEY} -e PINECONE_API_KEY=${PINECONE_API_KEY} -v $(pwd)/work:/app/user -v /etc/localtime:etc/localtime:ro -p 5000:5000 dbcraig/lmrac
 ```
+
+Pass API keys for OpenAI and Pinecone and mount your local directory (e.g., \$PWD) to the LmRaC /app/user directory. The local directory is where user experiments are found and to where all logs and output will be written.
 
 Open LmRaC in your browser: <http://localhost:5000>
 
 ![](img/LmRaC_init.png)
 
-```         
-LmRaC - Language Model Research Assistant & Collaborator Copyright (c) 2023-2024 Douglas B. Craig. All rights reserved. v0.1.0 24-Apr-2024
+LmRaC will initialize and report any problems. The first time you run LmRaC will use a default configuration and save it in the mounted work folder's config/ directory. See [Configuration](#Configuration) below for how to customize the configuration. When you quit LmRaC your current configuration is re-saved.
 
-LmRaC root directory = /app/user
-
-User configuration file not found: /app/user/config/LmRaC.config Using default configuration
-
-Session Logs Directory  : /app/user/sessions/
-Final Answers Directory : /app/user/sessions/finalAnswers/
-Experiments Directory   : /app/user/experiments/
-Vocabularies Directory  : /app/user/vocab/
-
-CPUs available: 4
-
-Opening new log session... LmRaC-2024_04_24-20_23_25.md
-
-Connecting to LLM... LLM initialized Using OpenAI Model : 'gpt-4-1106-preview' Connecting to Vector DB...
-
-=================================== [LmRaC] How can I help you? \>\>
-```
+### Creating an Index
 
 All questions are answered relative to a index of source material. So, set an index in Pinecone to store embeddings of the sources. If the index does not exist, you'll be asked to create it. LmRaC will indicate how many paragraphs of information are currently stored in the index. Note: the command to set the index is in natural language, so you can use: "set index to test1" or "index = test1" or anything that indicates you want to set the index.
 
@@ -75,6 +53,8 @@ All questions are answered relative to a index of source material. So, set an in
 
 RAGdom : test1 (28810) RAGexp : test1-exp (0) [LmRaC] The current index has been set to 'test1'.
 ```
+
+### Asking questions and populating your Index
 
 Ask a question. LmRaC will analyze the question for any mention of genes, diseases or pathways. It will summarize what it finds as the Search Context. If the index contains information about any of these items, you will be given the option of updating the index (i.e., searching for more documents). If the index does not include information about one or more item in the question, it will initiate a search of PubMed.
 
@@ -102,14 +82,34 @@ References exist for gene 'TP53'. Skip download from PubMed? [Y/n]
 References exist for pathway 'p53 signaling pathway'. Skip download from PubMed? [Y/n]
 ```
 
+### Viewing Answers
+
 Answers are displayed during processing and stored in the sessions/finalAnswers/ directory along with information about the original query, generated sub-queries, references for the answer and a GPT4 assessment of the final answer.
 
-Exit LmRaC by typing "bye" or "exit" or "adios" or...
+### Quitting LmRaC
+Exit LmRaC by typing "bye" or "exit" or "adios" or whatever language you prefer. You will be given the option to save your current configuration. This includes your current index, experiment and any loaded functions. ONce you exit the Docker container will shutdown and exit.
 
-```         
-[LmRaC] How can I help you? 
->> quit [LmRaC] Goodbye!
-```
+### Next steps
+
+#### Experiments
+Creating experiments
+Using experiment documents
+
+#### Functions
+xxx
+
+---
+
+## Installation
+LmRaC is a containerized web application. That means, everything you need to "install" and run LmRaC is packaged into a Docker container. This means the only thing you need to install is Docker on any operating system. Once Docker is installed you simply "pull" the latest LmRaC release from [DockerHub](https://hub.docker.com/) and run it from Docker. That's it! No worrying about installing the correct version of Python or this or that library. It's all in the container!
+
+If you're running on Linux then you have the option of installing the command-line version of Docker known as Docker Engine (aka Docker CE), otherwise you'll install Docker Desktop.
+
+### Docker Engine (Linux)
+xxx
+
+### Docker Desktop (Linux / Mac / Windows)
+xxx
 
 ------------------------------------------------------------------------
 
@@ -198,7 +198,19 @@ When a term is not recognized (i.e., no embedding has the identifier as metadata
 
 ## Usage: Experiments
 
+### Experimental Results
 xxx
+DEG example
+
+### Creating an experimental context
+xxx
+
+#### Saving Answers to Experiments
+saving answers to experiment from Answers dialog
+
+#### Manual upload
+xxx
+Using the LmRaC interface to load ... so embeddings are created
 
 ------------------------------------------------------------------------
 
@@ -234,13 +246,23 @@ xxx
 
 xxx Load the function ... it will be used based on the description
 
+---
+
+## Indexes and Experiments and Functions
+Indexes are purposely independent of Experiments.
+
+Functions are purposely independent of Experiments.
+
+With flexibility comes responsibility.
+xxx
+
 ------------------------------------------------------------------------
 
 ## Troubleshooting
 
-> **Memory:** Because LmRaC uses multiprocessing extensively, complex questions can require significant memory resources while documents are being processed. We recommend a minimum of 1GB for the Docker container, though 2GB may be necessary for large multi-part questions. The error **A process in the process pool was terminated abruptly while the future was running or pending** is usually an indication that LmRaC ran out of memory.
+> **LmRaC isn't calling my function:** The most common cause for this is that the function has not been loaded. Although function files are read and compiled at initialization, they must also be *loaded* in order to be available for questions. This allows LmRaC to focus only on functions relevant to the task at hand. Note that what functions are loaded is saved to the configuration file, so after restarting LmRaC your functions are automatically re-loaded.
 
-> **Interaction:** Though LmRaC can be run in any Docker environment, it is an interactive application. The error **EOFError: EOF when reading a line** indicates the container is running in a non-interactive mode.
+> **Memory:** Because LmRaC uses multiprocessing extensively, complex questions can require significant memory resources while documents are being processed. We recommend a minimum of 1GB for the Docker container, though 2GB may be necessary for large multi-part questions. The error **A process in the process pool was terminated abruptly while the future was running or pending** is usually an indication that LmRaC ran out of memory.
 
 > **Rate Limits:** All servers have rate limits (i.e., maximum number of requests per second). In the case of PubMed this is fix. For OpenAI this increases over time for users. In all cases LmRaC will retry a request in the event of a rate limit error. Retries employ an exponential backoff strategy that, in most cases, is sufficient for the request to ultimately succeed. As a consequence, users may see slower response times when using LmRaC with a new OpenAI account.
 
