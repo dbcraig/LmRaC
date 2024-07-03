@@ -12,22 +12,33 @@ LmRaC uses a multi-tier retrieval-augmented generation (RAG) design to index: do
 
 ## Table of Contents
 
-* [Prerequisites](#Prerequisites)
-* [Quick Start](#Quick-Start)
-* [Installation](#Installation)
-* [LmRaC Homepage](#LmRaC-Homepage)
-* [Indexes](#Indexes)
-* [Experiments](#Experiments)
-* [Functions](#Functions)
-* [Answers](#Answers)
-* [Configuration](#Configuration)
-* [Usage: Q & A](#Usage---Q-and-A)
-* [Usage: Experiments](#Usage---Experiments)
-* [Usage: User-Defined Functions](#Usage---User-Defined-Functions)
-* [Indexes and Experiments and Functions](#Indexes-and-Experiments-and-Functions)
-* [Troubleshooting](#Troubleshooting)
-* [How To Cite](#How-To-Cite)
-* [Contact](#Contact)
+> ### Getting Started
+> 
+> * [Prerequisites](#Prerequisites)
+> * [Quick Start](#Quick-Start)
+> * [Installation](#Installation)
+
+> ### Application Windows & Configuration
+> 
+> * [LmRaC Homepage](#LmRaC-Homepage)
+> * [Indexes](#Indexes)
+> * [Experiments](#Experiments)
+> * [Functions](#Functions)
+> * [Answers](#Answers)
+> * [Configuration](#Configuration)
+
+> ### Usage, Workflow & Troubleshooting
+> 
+> * [Usage: Q & A](#Usage---Q-and-A)
+> * [Usage: Experiments](#Usage---Experiments)
+> * [Usage: User-Defined Functions](#Usage---User-Defined-Functions)
+> * [Indexes and Experiments and Functions](#Indexes-and-Experiments-and-Functions)
+> * [Troubleshooting](#Troubleshooting)
+
+> ### Credits
+> 
+> * [How To Cite](#How-To-Cite)
+> * [Contact](#Contact)
 
 ------------------------------------------------------------------------
 
