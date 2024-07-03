@@ -204,7 +204,7 @@ xxx
 
 The LmRaC homepage allows the user to interact with LmRaC as well as open sub-windows for experiments, indexes, functions and saved answers.
 
-![](img/LmRaC_callout.png)
+![](img/LmRaC_main.png)
 
 1.  **LmRaC message area** shows all messages from LmRaC as well as user commands and questions.
 2.  **User input area** is where the user initiates questions and command to LmRaC.
