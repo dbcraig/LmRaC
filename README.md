@@ -56,7 +56,7 @@ LmRaC uses OpenAI's GPT-4o API to perform many language related functions. GPT d
 export OPENAI_API_KEY="sk-asdlfjlALJWEasdfLWERLWwwSFSSEwwwww"
 ```
 
-When using Docker Desktop, keys are part of the container's Run settings (see ![Container settings](#Container-settings)).
+When using Docker Desktop, keys are part of the container's Run settings (see [Container settings](#Container-settings)).
 
 ### Pinecone
 
@@ -66,7 +66,7 @@ When using Docker Desktop, keys are part of the container's Run settings (see ![
 export PINECONE_API_KEY="2368ff63-8a81-43e3-9fd5-46e892b9d1b3"
 ```
 
-When using Docker Desktop, keys are part of the container's Run settings (see ![Container settings](#Container-settings)).
+When using Docker Desktop, keys are part of the container's Run settings (see [Container settings](#Container-settings)).
 
 ------------------------------------------------------------------------
 
@@ -80,7 +80,7 @@ cd <your-lmrac-root>
 docker run -m1024m -it -e OPENAI_API_KEY=${OPENAI_API_KEY} -e PINECONE_API_KEY=${PINECONE_API_KEY} -v $(pwd)/work:/app/user -v /etc/localtime:etc/localtime:ro -p 5000:5000 dbcraig/lmrac
 ```
 
-Note, we recommend 1GB of memory and also mounting /etc/localtime to insure container time is the same as server time.
+Note, we recommend 1GB of memory and also mounting */etc/localtime* to insure container time is the same as server time.
 
 Open LmRaC in your browser using *localhost*. For example, <http://localhost:5000> Typically, the port is 5000, but depending on your Docker configuration and what else is running on your host, this may be different (e.g., 55001 for Docker Desktop). The LmRaC homepage will open and LmRaC will initialize. Any problems (e.g., keys) will be reported.
 
@@ -90,7 +90,7 @@ The first time you run LmRaC it will use a default configuration. See [Configura
 
 ### Creating an Index
 
-All questions are answered relative to an index of source material. So, set an index in Pinecone to store embeddings of the sources. If the index does not exist, you'll be asked to create it. LmRaC will indicate how many paragraphs of information are currently stored in the index. Note: the command to set the index is in natural language, so you can ask something like: "Set index to test1" or "index = test1" or anything that indicates you want to set the index.
+All questions are answered relative to an index of source material. So, set an index in Pinecone to store embeddings of the source articles. If the index does not exist, you'll be asked to create it. LmRaC will indicate how many paragraphs of information are currently stored in the index. Note that the command to set the index is in natural language, so you can ask something like: "Set index to test1" or "index = test1" or anything that indicates you want to set the index.
 
 ```         
 [user]  set index to test1
@@ -107,7 +107,7 @@ Each index has two parts:
 
 ### Asking questions and populating your Index
 
-Ask a question. LmRaC will analyze the question for any mention of genes, diseases or pathways using its vocabularies (see ![Configuration](#Configuration)). It will summarize what it finds as the Search Context. If the index already contains information about any of these items, you will be given the option of updating the index (i.e., searching for more documents). If the index does not include information about one or more item in the question, it will initiate a search of PubMed and populate the index.
+Ask a question. LmRaC will analyze the question for any mention of genes, diseases or pathways using its vocabularies (see [Configuration](#Configuration)). It will summarize what it finds as the Search Context. If the index already contains information about any of these items, you will be given the option of updating the index (i.e., searching for more documents). If the index does not include information about one or more item in the question, it will initiate a search of PubMed and populate the index.
 
 ```
 [user]  What is the difference between ESR1 and ESR2?
@@ -140,27 +140,31 @@ Retrieving document metadata from PubMed
 
 Answers are displayed during processing and saved in the *sessions/finalAnswers/* directory along with information about the original query, generated sub-queries, references for the answer and a GPT4 assessment of the final answer.
 
-To view the final answer (and its quality assessment) open the [Answers](#Answers) window by clicking on the Answers icon of the LmRaC homepage ([LmRaC Homepage](#LmRaC-Homepage)). From the Answers window answers can be viewed as markdown, HTML, downloaded, and/or saved to experiments as supplemental experiment documents.
+To view the final answer (and its quality assessment) open the [Answers](#Answers) window by clicking on the Answers icon of the ([LmRaC Homepage](#LmRaC-Homepage)). From the Answers window answers can be viewed as markdown, HTML, downloaded, and/or saved to experiments as supplemental experiment documents.
 
 ### Quitting LmRaC
 
-Exit LmRaC by typing "bye" or "exit" or "adios" in whatever language you prefer. You will be given the option to save your current configuration. The saved configuration includes your current index, experiment and any loaded functions. Once you exit the Docker container will exit.
+Exit LmRaC by typing "bye" or "exit" or "adios" in whatever language you prefer. You will be given the option to save your current configuration. The saved configuration includes your current index, experiment and any loaded functions. Once you quit the Docker container will exit.
 
 ### Next steps
 
-Once you've asked some questions and received answers, you'll probably want to setup experiments into which you can save answers and upload quantitative results. You can then use functions to access this data when asking questions about your own experiments! See ![Experiments](#Experiments) and ![Functions](#Functions) for more details.
+Once you've asked some questions and received answers, you'll probably want to setup experiments into which you can save answers and upload quantitative results. You can then ask questions about your own experimental results! See [Experiments](#Experiments) and [Functions](#Functions) for more details.
 
 ------------------------------------------------------------------------
 
 ## Installation
 
-LmRaC is a containerized web application. That means, everything you need to "install" and run LmRaC is packaged into a Docker container. So, the only thing you need for any operating system is Docker . Once Docker is installed you simply "pull" the latest LmRaC release from [DockerHub](https://hub.docker.com/) and run it from Docker. That's it! No worrying about installing the correct version of Python or this or that library. It's all in the container!
+LmRaC is a containerized web application. That means, everything you need to "install" and run LmRaC is packaged into a single Docker container. So, the only thing you need to install for any operating system is Docker. Once Docker is installed you simply "pull" the latest LmRaC release from [DockerHub](https://hub.docker.com/) and run it from Docker. That's it! No worrying about installing the correct version of Python or this or that library or confusing dependencies. It's all in the container!
 
 If you're running on Linux then you have the option of installing the command-line version of Docker known as Docker Engine (aka Docker CE), otherwise you'll need to install Docker Desktop.
 
 ### Docker Engine (Linux)
 
+#### Install Docker Engine
+
 xxx
+
+#### Pull and run the latest LmRaC image
 
 ```         
 docker pull dbcraig/lmrac:latest
@@ -168,7 +172,7 @@ cd <your-lmrac-root>
 docker run -m1024m -it -e OPENAI_API_KEY=${OPENAI_API_KEY} -e PINECONE_API_KEY=${PINECONE_API_KEY} -v $(pwd)/work:/app/user -v /etc/localtime:etc/localtime:ro -p 5000:5000 dbcraig/lmrac
 ```
 
-xxx
+Open the [LmRaC Homepage](#LmRaC-Homepage) from <http://localhost:5000>.
 
 ### Docker Desktop (Linux / Mac / Windows)
 
@@ -176,9 +180,13 @@ xxx
 
 #### Pull the latest LmRaC image
 
-From the main Search bar search for *dbcraig/lmrac:latest* and then click on Pull. This will copy the latest release of LmRaC to your local machine.
+From the Docker Desktop search for *dbcraig/lmrac* and then pull the *latest* image. This will copy the latest release of LmRaC to your local machine.
 
 ![](img/DockerDesktop_Pull.png)
+
+1. **Search:** Click on the search area to open the Search dialog.
+2. **Search Dialog:** Search for *dbcraig/lmrac*. Set the Tag dropdown to *latest* (default).
+3. **Pull:** Click on the Pull button to download the latest LmRaC image to Docker Desktop.
 
 #### Create a running container from the image
 
@@ -186,18 +194,35 @@ You should now see the dbcraig/lmrac:latest image in the Images view. Highlight 
 
 ![](img/DockerDesktop_Run.png)
 
+1. **Images view:** Click on Images to see a list of all pulled images.
+2. **Run:** Find *dbcraig/lmrac* in the list and click on the run icon (play arrow) to open the run dialog.
+
 #### Container settings
 
 Before running the image set the parameters so that LmRaC has API keys and knows where to find your data.
 
 ![](img/DockerDesktop_Settings.png)
 
+A note on terminology: the Docker *image* is a read-only template with all the information needed for creating a running program. An instance of the running program (created from the *image*) is called a *container*. For LmRaC the container is a web server that you can interact with through a browser.
+
+1. **Container name:** (optional) You can give the container (the running program) a name, otherwise Docker Desktop with generate a random name.
+2. **Ports:** Enter a "0" for Docker Desktop to generate a random port on which to find the LmRaC application. Though the LmRaC container runs on port 5000, it doesn't know what port the host machine has available. This allows Docker Desktop to assign an available port and map it LmRaC's internal port (this is analogous to how your local directory is mapped to LmRaC's internal /app/user).
+3. **Volumes (work directory):** Select the path on your host (the machine running Docker Desktop) that you want to be the user root (*/app/user*) for LmRaC. This allows the container to write files to your host (the machine running Docker Desktop). For security, Docker containers are not allowed to access anything on the host machine *unless* you explicitly map (aka mount) a directory into the container.
+4. **Volumes (localtime):** (optional) Time in the container is not necessarily the same as time on the host running Docker Desktop. Mapping the */etc/localtime* insures that the timestamp LmRaC uses to name answers and logs is aligned with the time on your Docker Desktop host.
+5. **Environment variables (OpenAI API):** Pass in the literal API key value that LmRaC will use to talk to the OpenAI GPT-4o model.
+6. **Environment variables (Pinecone API):** Pass in the literal API key value that LmRaC will use to talk to the Pinecone vector database.
+7. **Run:** Press Run to create the running container.
+
 #### Launch the LmRaC application
-xxx
+
+You should now see container you just created running in the Containers view.
 
 ![](img/DockerDesktop_Launch.png)
 
-xxx
+1. **Containers view:** Click on Containers to see a list of all containers. This includes running as well as stopped containers. 
+2. **Container URL line:** Since LmRaC is a web application and you specified a Port as part of the [Run configuration](#Container-settings), you will see a hyperlink to launch LmRaC. Click on this to open the browser to see the [LmRaC Homepage](#LmRaC-Homepage).
+3. **Stop container:** Once you are done running LmRaC you can clean up be stopping the running container. This frees up CPU and memory on the host.
+4. **Delete container:** Stopped containers exist until you delete them since they can be re-started. Note that deleting a container *does not* delete or otherwise affect the image it was created from.
 
 ------------------------------------------------------------------------
 
@@ -223,32 +248,32 @@ The LmRaC homepage allows the user to interact with LmRaC as well as open sub-wi
 Although the user input area is typically used to ask questions, it can also be used to enter commands. LmRac understands the following commands:
 
 - **Help**
-  - **General** xx
-  - **Indexes** xx
-  - **Experiments** xx
-  - **Functions** xx
-  - **Questions** xx
-  - **Examples** xx
-- **General Questions** xx
-- **Experiment Questions** xx
+  - **General** A summary of available help.
+  - **Indexes** General information about indexes.
+  - **Experiments** General information about experiments. 
+  - **Functions** General information about functions.
+  - **Questions** General information about asking questions.
+  - **Examples** Some sample questions you can ask.
+- **General Questions** How to ask general questions about biology.
+- **Experiment Questions** How to ask questions about experiments and their data. 
 - **Indexes**
-  - **Set Current Index** xx
-  - **Show Current Index** xx
-  - **List Indexes** xx
+  - **Set Current Index** Set/create the index for answering questions.
+  - **Show Current Index** Show the name of the current index.
+  - **List Indexes** List the available indexes.
 - **Experiments**
-  - **Set Current Experiment** xx
-  - **Show Current Experiment** xx
-  - **List Experiments** xx
+  - **Set Current Experiment** Set/create an experiment folder.
+  - **Show Current Experiment** Show the name of the current experiment.
+  - **List Experiments** List the available experiments.
 - **Functions**
-  - **Load Function** xx
-  - **Unload Function** xx
-  - **List Available Functions** xx
-  - **List Loaded Functions** xx
-  - **Set REST API IP** xx
-- **Show Configuration** xx
-- **Load Experiment Documents** xx
-- **Enable/Disable Debug Messages** xxx
-- **Quit** xx
+  - **Load Function** Make a function library unavailable for question answering.
+  - **Unload Function** Make a function library available for question answering.
+  - **List Available Functions** List function libraries that have been successfully compiled and are available to be loaded.
+  - **List Loaded Functions** List function libraries that will be used when answering questions.
+  - **Set REST API IP** Set the IP and port on which LmRaC will make function requests to the user-defined REST API server.
+- **Show Configuration** Show the current configuration and settings.
+- **Load Experiment Documents** Manually load and compute embeddings for a document then save it to an experiment.
+- **Enable/Disable Debug Messages** Show verbose function calls and intermediate results. Can be useful for rephrasing more complex questions.
+- **Quit** Save the current configuration and shutdown the homepage and server.
 
 Note that commands should be asked one at a time. Also, LmRaC currently does not remember previous commands or questions.
 
@@ -387,6 +412,8 @@ xxx
 
 #### Saving Answers to Experiments
 
+Keep in mind that when an answer is saved to an experiment, the text of the answer is saved in the experiment directory, but the embeddings (i.e., searchable meaning) are saved in an index along with metadata that links it to the experiment. When asking questions about the experiment, you must use this index.
+
 saving answers to experiment from Answers dialog
 
 #### Manual upload
@@ -427,6 +454,11 @@ xxx
 
 xxx Load the function ... it will be used based on the description
 
+### General Functions
+
+xxx
+Can they be used to extend the functionality of LmRaC ??
+
 ------------------------------------------------------------------------
 
 ## Indexes and Experiments and Functions
@@ -435,7 +467,11 @@ Indexes are purposely independent of Experiments.
 
 Functions are purposely independent of Experiments.
 
-With flexibility comes responsibility. xxx
+With flexibility comes responsibility. Maybe the most confusing part of LmRaC is remembering that indexes and experiments independent. Think of indexes as a collection of information about a domain of knowledge *that you define.* Within that collection is additional information about particular experiments (e.g., answers you've saved, documents you've uploaded, interpretations of results). So, if you want to ask questions (i.e., search) about these experiments, you need to use this index.
+
+However, information about an experiment can be saved to *more than one index*! You may have an index created specifically for one disease (e.g., breast cancer). You may have another index created for a particular experimental protocol (e.g., differential gene expression). Information about your experiment investigating gene expression in breast cancer can be saved to both indexes! *Or*, you could just create one large index for both breast cancer and differential gene expression. You have the flexibility to design the knowledge base best suited for the questions you ask.
+
+Likewise, functions are designed to manipulate your data (e.g., read, search, compute). You can group them any way you like and use them in any combination. They are not part of an experiment. They are only there to aid in answering questions about the experiment.
 
 ------------------------------------------------------------------------
 
