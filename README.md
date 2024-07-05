@@ -383,9 +383,11 @@ LmRaC answers use [standard Markdown](https://www.markdownguide.org/getting-star
 
 ## Usage - Q and A
 
-LmRaC is specifically designed to answer questions regarding genes, disease and biological pathways. It does this by searching [NIH PubMed](https://pubmed.ncbi.nlm.nih.gov/) for related journal articles. Articles are indexed using text embedding and tagged with metadata corresponding to their search (e.g., KEGG, MeSH or gene identifiers). \### Setting an Index
+LmRaC is specifically designed to answer questions regarding genes, disease and biological pathways. It does this by searching [NIH PubMed](https://pubmed.ncbi.nlm.nih.gov/) for related journal articles. Articles are indexed using text embeddings and tagged with metadata corresponding to their search (e.g., KEGG, MeSH or gene identifiers). 
 
-The **index** is the vector database used to search for related information. LmRaC does not answer questions using GPT4, instead it searches PubMed for related publications and then assembles this information into an answer. Initially, an index is empty. It is then populated as questions are asked about particular genes, diseases and/or pathways.
+### Setting an Index
+
+The **index** is the vector database used to search for related information. LmRaC does not answer questions using GPT4's knowledge, instead it searches PubMed for related publications and then assembles this information into an answer. This virtually eliminates any chance of hallucinations. Initially, an index is empty. It is then populated as questions are asked about particular genes, diseases and/or pathways.
 
 ### Asking a Question
 
@@ -401,7 +403,7 @@ When a term is not recognized (i.e., no embedding has the identifier as metadata
 
 ### Tips
 
-> **What's Enough?** Do not feel you must populate an index with hundreds of articles. Often, answers require only a few articles. Since searches return results sorted by relevance, it is often sufficient to only download 10 of the best citations to answer common questions.
+> **What's Enough?** Do not feel you must populate an index with hundreds of articles. Often, answers require only a few articles. Since searches return results sorted by relevance, it is often sufficient to only download 10 of the best citations to answer most common questions.
 
 > **Pathway References:** When asking a question about pathways in particular, explicitly mention the pathway. For example, "How is smoking related to the NSCLC pathway?" is more likely to reference both the pathway for NSCLC (KEGG [hsa0522](https://www.genome.jp/pathway/hsa05223)) and the disease (MeSH [D002289](https://meshb.nlm.nih.gov/record/ui?ui=D002289)).
 
@@ -458,6 +460,31 @@ LmRaC must know this IP:port in order to make function requests. You can edit th
 ### Adding Functions
 
 xxx
+
+#### Function prototypes (interface definition)
+
+xxx
+Since LmRaC is a language model, it relies on descriptions of functions and parameters ...
+
+```
+#
+#	Line comments begin with a '#' mark
+#
+DESCRIPTION	"This describes the entire group of functions and is used to create a README file"
+
+FUNCTION initializeMyFunctions		"Functions dont have to have any parameters"
+
+# indentation is not necessary and is only used for readability; extra tabs and spaces are ignored
+# all lines must have a "comment" value since these are used by LmRaC to interpret and assign values
+
+FUNCTION getTopExpressionResults 	  "This text describes the what the function does and is how LmRaC decides to use it"
+    PARAMETER topK:NUMBER 		      "The NUMBER type may be integer or float depending on the function implementation"
+    PARAMETER byFoldChange:BOOLEAN 	"The BOOLEAN type is true or false"
+    PARAMETER experiment:STRING 	  "STRING type are for characters"
+    PARAMETER filename:STRING*		  "Adding a '*' makes the parameter optional"
+    PARAMETER geneArray:ARRAY 		  "ARRAY types can contain any type item except another array"
+        ITEM gene:STRING 		        "array items begin with the ITEM keyword"
+```
 
 ### Using Functions
 
