@@ -472,18 +472,18 @@ Since LmRaC is a language model, it relies on descriptions of functions and para
 #
 DESCRIPTION	"This describes the entire group of functions and is used to create a README file"
 
-FUNCTION initializeMyFunctions		"Functions dont have to have any parameters"
+FUNCTION initializeMyFunctions      "Functions dont have to have any parameters"
 
 # indentation is not necessary and is only used for readability; extra tabs and spaces are ignored
 # all lines must have a "comment" value since these are used by LmRaC to interpret and assign values
 
-FUNCTION getTopExpressionResults 	  "This text describes the what the function does and is how LmRaC decides to use it"
-    PARAMETER topK:NUMBER 		      "The NUMBER type may be integer or float depending on the function implementation"
-    PARAMETER byFoldChange:BOOLEAN 	"The BOOLEAN type is true or false"
-    PARAMETER experiment:STRING 	  "STRING type are for characters"
-    PARAMETER filename:STRING*		  "Adding a '*' makes the parameter optional"
-    PARAMETER geneArray:ARRAY 		  "ARRAY types can contain any type item except another array"
-        ITEM gene:STRING 		        "array items begin with the ITEM keyword"
+FUNCTION getTopExpressionResults    "This text describes the what the function does and is how LmRaC decides to use it"
+    PARAMETER topK:NUMBER           "The NUMBER type may be integer or float depending on the function implementation"
+    PARAMETER byFoldChange:BOOLEAN  "The BOOLEAN type is true or false"
+    PARAMETER experiment:STRING     "STRING type are for characters"
+    PARAMETER filename:STRING*      "Adding a '*' makes the parameter optional"
+    PARAMETER geneArray:ARRAY       "ARRAY types can contain any type item except another array"
+        ITEM gene:STRING            "array items begin with the ITEM keyword"
 ```
 
 ### Using Functions
