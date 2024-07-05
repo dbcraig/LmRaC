@@ -56,7 +56,7 @@ LmRaC uses OpenAI's GPT-4o API to perform many language related functions. GPT d
 export OPENAI_API_KEY="sk-asdlfjlALJWEasdfLWERLWwwSFSSEwwwww"
 ```
 
-When using Docker Desktop, keys are part of the container's Run settings (see ![](#Container-settings)).
+When using Docker Desktop, keys are part of the container's Run settings (see ![Container settings](#Container-settings)).
 
 ### Pinecone
 
@@ -66,7 +66,7 @@ When using Docker Desktop, keys are part of the container's Run settings (see ![
 export PINECONE_API_KEY="2368ff63-8a81-43e3-9fd5-46e892b9d1b3"
 ```
 
-When using Docker Desktop, keys are part of the container's Run settings (see ![](#Container-settings)).
+When using Docker Desktop, keys are part of the container's Run settings (see ![Container settings](#Container-settings)).
 
 ------------------------------------------------------------------------
 
@@ -107,7 +107,7 @@ Each index has two parts:
 
 ### Asking questions and populating your Index
 
-Ask a question. LmRaC will analyze the question for any mention of genes, diseases or pathways using its vocabularies (see ![](#Configuration)). It will summarize what it finds as the Search Context. If the index already contains information about any of these items, you will be given the option of updating the index (i.e., searching for more documents). If the index does not include information about one or more item in the question, it will initiate a search of PubMed and populate the index.
+Ask a question. LmRaC will analyze the question for any mention of genes, diseases or pathways using its vocabularies (see ![Configuration](#Configuration)). It will summarize what it finds as the Search Context. If the index already contains information about any of these items, you will be given the option of updating the index (i.e., searching for more documents). If the index does not include information about one or more item in the question, it will initiate a search of PubMed and populate the index.
 
 ```
 [user]  What is the difference between ESR1 and ESR2?
@@ -148,7 +148,7 @@ Exit LmRaC by typing "bye" or "exit" or "adios" in whatever language you prefer.
 
 ### Next steps
 
-Once you've asked some questions and received answers, you'll probably want to setup experiments into which you can save answers and upload quantitative results. You can then use functions to access this data when asking questions about your own experiments! See ![](#Experiments) and ![](#Functions) for more details.
+Once you've asked some questions and received answers, you'll probably want to setup experiments into which you can save answers and upload quantitative results. You can then use functions to access this data when asking questions about your own experiments! See ![Experiments](#Experiments) and ![Functions](#Functions) for more details.
 
 ------------------------------------------------------------------------
 
