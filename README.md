@@ -248,35 +248,35 @@ The LmRaC homepage allows the user to interact with LmRaC as well as open sub-wi
 Although the user input area is typically used to ask questions, it can also be used to enter commands. LmRac understands the following commands:
 
 #### Help Commands
-- **Help** A summary of available help.
-- **Help indexes** General information about indexes.
-- **Help experiments** General information about experiments. 
-- **Help functions** General information about functions.
-- **Help questions** General information about asking questions.
-- **Help examples** Some sample questions you can ask.
+- **Help**  A summary of available help.
+- **Help indexes**  General information about indexes.
+- **Help experiments**  General information about experiments. 
+- **Help functions**  General information about functions.
+- **Help questions**  General information about asking questions.
+- **Help examples**  Some sample questions you can ask.
   
 #### Index Commands
-- **Set current index to** *\<index-name\>* Set/create the index for answering questions.
-- **Show current index** Show the name of the current index.
-- **List indexes** List the available indexes.
+- **Set current index to** *\<index-name\>*  Set/create the index for answering questions.
+- **Show current index**  Show the name of the current index.
+- **List indexes**  List the available indexes.
   
 #### Experiment Commands
-- **Set current experiment to** *\<experiment-name\>* Set/create an experiment folder.
-- **Show current experiment** Show the name of the current experiment.
-- **List experiments** List the available experiments.
+- **Set current experiment to** *\<experiment-name\>*  Set/create an experiment folder.
+- **Show current experiment**  Show the name of the current experiment.
+- **List experiments**  List the available experiments.
   
 #### Function Commands
-- **Load function** *<function-name>* Make a function library unavailable for question answering.
-- **Unload function** *<function-name>* Make a function library available for question answering.
-- **List available functions** List function libraries that have been successfully compiled and are available to be loaded.
-- **List loaded functions** List function libraries that will be used when answering questions.
-- **Set REST API IP** Set the IP and port on which LmRaC will make function requests to the user-defined REST API server.
+- **Load function** *\<function-name\>*  Make a function library unavailable for question answering.
+- **Unload function** *\<function-name\>*  Make a function library available for question answering.
+- **List available functions**  List function libraries that have been successfully compiled and are available to be loaded.
+- **List loaded functions**  List function libraries that will be used when answering questions.
+- **Set REST API IP**  Set the IP and port on which LmRaC will make function requests to the user-defined REST API server.
   
 #### Other Commands
-- **Show configuration** Show the current configuration and settings.
-- **Load experiment documents to** *<experiment-name>* Manually load and compute embeddings for a document then save it to an experiment.
-- **Enable/Disable debug messages** Show verbose function calls and intermediate results. Can be useful for rephrasing more complex questions.
-- **Quit** Save the current configuration and shutdown the homepage and server.
+- **Show configuration**  Show the current configuration and settings.
+- **Load experiment documents to** *\<experiment-name\>*  Manually load and compute embeddings for a document then save it to an experiment.
+- **Enable/Disable debug messages**  Show verbose function calls and intermediate results. Can be useful for rephrasing more complex questions.
+- **Quit**  Save the current configuration and shutdown the homepage and server.
 
 Note that commands should be asked one at a time. Also, LmRaC currently does not remember previous commands or questions.
 
