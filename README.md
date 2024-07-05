@@ -46,29 +46,33 @@ LmRaC uses a multi-tier retrieval-augmented generation (RAG) design to index: do
 
 ### Docker
 
-LmRaC runs as a web application in a Docker container. Users must therefore have either [Docker Engine](https://docs.docker.com/engine/install/) (CLI) or [Docker Desktop](https://docs.docker.com/desktop/install/linux-install/) (GUI) installed. If running Docker in the cloud, we recommend a container optimized OS. See [Installation](#Installation) below for details on installing Docker.
+LmRaC runs as a web application in a Docker container. Users must therefore have either [Docker Engine](https://docs.docker.com/engine/install/) (CLI - Linux) or [Docker Desktop](https://docs.docker.com/desktop/install/linux-install/) (GUI - Linux, Mac, Windows) installed. If running Docker in the cloud, we recommend a container optimized OS. See [Installation](#Installation) below for details on installing Docker.
 
 ### OpenAI
 
-LmRaC uses OpenAI's GPT-4o API to perform many language related functions. GPT does not per se answer user questions. Instead, it is used to assess the usefulness of primary source material for answering questions. Users of LmRaC must have an active OpenAI API account with an API key (see [Project API keys](https://platform.openai.com/api-keys)). Once a key has been created, it must be passed into the Docker container. This is typically done by creating an environment variable and then passing a reference to this variable in the **docker run** command using the **-e** option.
+LmRaC uses OpenAI's GPT-4o API to perform many language related functions. GPT does not per se answer user questions. Instead, it is used to assess the usefulness of primary source material for answering questions. Users of LmRaC must have an active OpenAI API account with an API key (see [OpenAI API keys](https://platform.openai.com/docs/quickstart)). Once a key has been created, it must be passed into the Docker container. This is typically done by creating an environment variable and then passing a reference to this variable in the **docker run** command using the **-e** option. 
 
 ```         
 export OPENAI_API_KEY="sk-asdlfjlALJWEasdfLWERLWwwSFSSEwwwww"
 ```
 
+When using Docker Desktop, keys are part of the container's Run settings (see ![](#Container-settings)).
+
 ### Pinecone
 
-[Pinecone](https://app.pinecone.io/) is a vector database used by LmRaC to store and search vector embedding of source material. Users must have an active Pinecone account then [create a Serverless API Key](https://docs.pinecone.io/guides/projects/understanding-projects#api-keys) from the Pinecone console. Once a key has been created, it must be passed into the Docker container. This is typically done by creating an environment variable and then passing a reference to this variable in the **docker run** command using the **-e** option.
+[Pinecone](https://app.pinecone.io/) is a vector database used by LmRaC to store and search vector embedding of source material (i.e., indexes). Users must have an active Pinecone account then [create a Serverless API Key](https://docs.pinecone.io/guides/projects/understanding-projects#api-keys) from the Pinecone console. Once a key has been created, it must be passed into the Docker container. This is typically done by creating an environment variable and then passing a reference to this variable in the **docker run** command using the **-e** option.
 
 ```         
 export PINECONE_API_KEY="2368ff63-8a81-43e3-9fd5-46e892b9d1b3"
 ```
 
+When using Docker Desktop, keys are part of the container's Run settings (see ![](#Container-settings)).
+
 ------------------------------------------------------------------------
 
 ## Quick Start
 
-Pull the latest tagged image from Docker Hub. Run LmRaC using Docker Engine (if Docker is not installed or you're using Docker Desktop, see the [Installation](#Installation) instructions below). You'll need to pass API keys for OpenAI and Pinecone and mount your local directory (e.g., \$PWD) to the LmRaC /app/user directory. The local directory is where user experiments are found and to where all LmRaC logs and output will be written.
+Pull the latest tagged image from Docker Hub. Run LmRaC using Docker Engine. If Docker is not installed or you're using Docker Desktop, see the [Installation](#Installation) instructions below. You'll need to pass API keys for OpenAI and Pinecone and mount your local directory (e.g., \$pwd) to the LmRaC */app/user* directory. The local directory is where user experiments are found and to where all LmRaC logs and output will be written.
 
 ```         
 docker pull dbcraig/lmrac:latest
@@ -76,15 +80,17 @@ cd <your-lmrac-root>
 docker run -m1024m -it -e OPENAI_API_KEY=${OPENAI_API_KEY} -e PINECONE_API_KEY=${PINECONE_API_KEY} -v $(pwd)/work:/app/user -v /etc/localtime:etc/localtime:ro -p 5000:5000 dbcraig/lmrac
 ```
 
-Open LmRaC in your browser: <http://localhost:5000> Typically, the port is 5000, but depending on your Docker configuration and what else is running on your host, this may be different (e.g., 55001 for Docker Desktop).
+Note, we recommend 1GB of memory and also mounting /etc/localtime to insure container time is the same as server time.
+
+Open LmRaC in your browser using *localhost*. For example, <http://localhost:5000> Typically, the port is 5000, but depending on your Docker configuration and what else is running on your host, this may be different (e.g., 55001 for Docker Desktop). The LmRaC homepage will open and LmRaC will initialize. Any problems (e.g., keys) will be reported.
 
 ![](img/LmRaC_init.png)
 
-LmRaC will initialize and report any problems. The first time you run LmRaC will use a default configuration. See [Configuration](#Configuration) below for how to customize the configuration. When you quit LmRaC your current configuration is saved to LmRaC.config in the the mounted config/ folder.
+The first time you run LmRaC it will use a default configuration. See [Configuration](#Configuration) below for how to customize the configuration. When you quit LmRaC your current configuration is saved to *config/LmRaC.config* in the the mounted directory.
 
 ### Creating an Index
 
-All questions are answered relative to a index of source material. So, set an index in Pinecone to store embeddings of the sources. If the index does not exist, you'll be asked to create it. LmRaC will indicate how many paragraphs of information are currently stored in the index. Note: the command to set the index is in natural language, so you can ask something like: "Set index to test1" or "index = test1" or anything that indicates you want to set the index.
+All questions are answered relative to an index of source material. So, set an index in Pinecone to store embeddings of the sources. If the index does not exist, you'll be asked to create it. LmRaC will indicate how many paragraphs of information are currently stored in the index. Note: the command to set the index is in natural language, so you can ask something like: "Set index to test1" or "index = test1" or anything that indicates you want to set the index.
 
 ```         
 [user]  set index to test1
@@ -96,58 +102,53 @@ RAGexp : test1-exp (123)
 
 Each index has two parts: 
 
-- **RAGdom** the general domain knowledge index for primary material (e.g., PubMed articles)
-- **RAGexp** the experiment specific index for secondary material (e.g., saved answers, protocols, background/context knowledge)
+- **RAGdom:** the general domain knowledge index for primary material (i.e., PubMed articles)
+- **RAGexp:** the experiment specific index for secondary material (e.g., saved answers, protocols, background/context knowledge)
 
 ### Asking questions and populating your Index
 
-Ask a question. LmRaC will analyze the question for any mention of genes, diseases or pathways. It will summarize what it finds as the Search Context. If the index already contains information about any of these items, you will be given the option of updating the index (i.e., searching for more documents). If the index does not include information about one or more item in the question, it will initiate a search of PubMed.
+Ask a question. LmRaC will analyze the question for any mention of genes, diseases or pathways using its vocabularies (see ![](#Configuration)). It will summarize what it finds as the Search Context. If the index already contains information about any of these items, you will be given the option of updating the index (i.e., searching for more documents). If the index does not include information about one or more item in the question, it will initiate a search of PubMed and populate the index.
 
-```         
-[LmRaC] How can I help you? \>\> what is tp53? How detailed an answer would you like (1-7)?
-
+```
+[user]  What is the difference between ESR1 and ESR2?
+[LmRaC] How detailed an answer would you like (1-7)?
+[user]  2
 ## Question
-
-'what is tp53' Answer complexity: 1 Analyzing question to determine genes, pathways and diseases...
+'What is the difference between ESR1 and ESR2?'
+Answer complexity: 2
+Analyzing question to determine genes, pathways and diseases...
 
 ## Search Context
-
-Genes : ['TP53'] Pathways : hsa04115 : p53 signaling pathway References (curated): [16557269, 15838523, 11747320, 11313928, 15116721, 12505356, 10714958, 16697662, 16915296, 17409411, 26037915, 19584092, 19240372, 12135761] Diseases :
-
+Genes    : ['ESR1', 'ESR2']
+Pathways :
+Diseases :
 ## PubMed Search : Genes
+### Gene ESR1
+[LmRaC] 
+Would you like to search PubMed for articles related to gene 'ESR1'? [y/N] 
+[user]  yes
 
-### Gene TP53
+Number of citations for ESR1 = 4275
+[LmRaC] How many citations would you like to download (up to top 100)?
 
-References exist for gene 'TP53'. Skip download from PubMed? [Y/n]
-
-## PubMed Search : Pathways
-
-### Pathway hsa04115 : p53 signaling pathway
-
-References exist for pathway 'p53 signaling pathway'. Skip download from PubMed? [Y/n]
+[user]  10
+Retrieving document metadata from PubMed
+...
 ```
 
 ### Viewing Answers
 
-Answers are displayed during processing and saved in the sessions/finalAnswers/ directory along with information about the original query, generated sub-queries, references for the answer and a GPT4 assessment of the final answer.
+Answers are displayed during processing and saved in the *sessions/finalAnswers/* directory along with information about the original query, generated sub-queries, references for the answer and a GPT4 assessment of the final answer.
 
-To view the final answer (and its quality assessment) open the Answers window by clicking on the Answers icon of the LmRaC homepage ([LmRaC Homepage](#LmRaC-Homepage)). From the Answers window answers can be viewed as markdown, HTML, downloaded and saved to experiments as supplemental experiment documents.
+To view the final answer (and its quality assessment) open the [Answers](#Answers) window by clicking on the Answers icon of the LmRaC homepage ([LmRaC Homepage](#LmRaC-Homepage)). From the Answers window answers can be viewed as markdown, HTML, downloaded, and/or saved to experiments as supplemental experiment documents.
 
 ### Quitting LmRaC
 
-Exit LmRaC by typing "bye" or "exit" or "adios" or whatever language you prefer. You will be given the option to save your current configuration. This includes your current index, experiment and any loaded functions. ONce you exit the Docker container will shutdown and exit.
+Exit LmRaC by typing "bye" or "exit" or "adios" in whatever language you prefer. You will be given the option to save your current configuration. The saved configuration includes your current index, experiment and any loaded functions. Once you exit the Docker container will exit.
 
 ### Next steps
 
-Once you've asked some questions and received answers, you'll probably want to setup experiments into which you can upload quantitative results. You can then use functions to access this data as part of your questions!
-
-#### Experiments & Data
-
-Creating experiments Using experiment documents
-
-#### Using Functions
-
-xxx
+Once you've asked some questions and received answers, you'll probably want to setup experiments into which you can save answers and upload quantitative results. You can then use functions to access this data when asking questions about your own experiments! See ![](#Experiments) and ![](#Functions) for more details.
 
 ------------------------------------------------------------------------
 
@@ -155,7 +156,7 @@ xxx
 
 LmRaC is a containerized web application. That means, everything you need to "install" and run LmRaC is packaged into a Docker container. So, the only thing you need for any operating system is Docker . Once Docker is installed you simply "pull" the latest LmRaC release from [DockerHub](https://hub.docker.com/) and run it from Docker. That's it! No worrying about installing the correct version of Python or this or that library. It's all in the container!
 
-If you're running on Linux then you have the option of installing the command-line version of Docker known as Docker Engine (aka Docker CE), otherwise you'll install Docker Desktop.
+If you're running on Linux then you have the option of installing the command-line version of Docker known as Docker Engine (aka Docker CE), otherwise you'll need to install Docker Desktop.
 
 ### Docker Engine (Linux)
 
@@ -185,7 +186,7 @@ You should now see the dbcraig/lmrac:latest image in the Images view. Highlight 
 
 ![](img/DockerDesktop_Run.png)
 
-#### Container setting
+#### Container settings
 
 Before running the image set the parameters so that LmRaC has API keys and knows where to find your data.
 
@@ -456,4 +457,4 @@ With flexibility comes responsibility. xxx
 
 ## Contact
 
-Douglas Craig : [craigdou\@med.umich.edu](mailto:craigdou@med.umich.edu){.email}
+Douglas Craig : <craigdou@med.umich.edu>
