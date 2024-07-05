@@ -256,12 +256,12 @@ Although the user input area is typically used to ask questions, it can also be 
 - **Help examples** Some sample questions you can ask.
   
 #### Index Commands
-- **Set current index to** *<index-name>* Set/create the index for answering questions.
+- **Set current index to <** *<index-name>* **>** Set/create the index for answering questions.
 - **Show current index** Show the name of the current index.
 - **List indexes** List the available indexes.
   
 #### Experiment Commands
-- **Set current experiment to** *<experiment-name>* Set/create an experiment folder.
+- **Set current experiment to <** *experiment-name* **>** Set/create an experiment folder.
 - **Show current experiment** Show the name of the current experiment.
 - **List experiments** List the available experiments.
   
