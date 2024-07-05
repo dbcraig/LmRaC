@@ -82,7 +82,7 @@ docker run -m1024m -it -e OPENAI_API_KEY=${OPENAI_API_KEY} -e PINECONE_API_KEY=$
 
 Note, we recommend 1GB of memory and also mounting */etc/localtime* to insure container time is the same as server time.
 
-Open LmRaC in your browser using *localhost*. For example, <http://localhost:5000> Typically, the port is 5000, but depending on your Docker configuration and what else is running on your host, this may be different (e.g., 55001 for Docker Desktop). The LmRaC homepage will open and LmRaC will initialize. Any problems (e.g., keys) will be reported.
+Open LmRaC in your browser using *localhost*. For example, <http://localhost:5000> Typically, the port is 5000, but depending on your Docker configuration and what else is running on your host, this may be different (e.g., 55001 for Docker Desktop). The LmRaC homepage will open and LmRaC will initialize. Any problems (e.g., missing keys) will be reported.
 
 ![](img/LmRaC_init.png)
 
@@ -185,7 +185,7 @@ From the Docker Desktop search for *dbcraig/lmrac* and then pull the *latest* im
 ![](img/DockerDesktop_Pull.png)
 
 1. **Search:** Click on the search area to open the Search dialog.
-2. **Search Dialog:** Search for *dbcraig/lmrac*. Set the Tag dropdown to *latest* (default).
+2. **Search dialog:** Search for *dbcraig/lmrac*. Set the Tag dropdown to *latest* (default).
 3. **Pull:** Click on the Pull button to download the latest LmRaC image to Docker Desktop.
 
 #### Create a running container from the image
@@ -215,12 +215,12 @@ A note on terminology: the Docker *image* is a read-only template with all the i
 
 #### Launch the LmRaC application
 
-You should now see container you just created running in the Containers view.
+You should now see the container you just created running in the Containers view.
 
 ![](img/DockerDesktop_Launch.png)
 
 1. **Containers view:** Click on Containers to see a list of all containers. This includes running as well as stopped containers. 
-2. **Container URL line:** Since LmRaC is a web application and you specified a Port as part of the [Run configuration](#Container-settings), you will see a hyperlink to launch LmRaC. Click on this to open the browser to see the [LmRaC Homepage](#LmRaC-Homepage).
+2. **Container URL line:** Since LmRaC is a web application and you specified a Port of "0" as part of the [Run configuration](#Container-settings), you will see a hyperlink created by Docker Desktop to launch LmRaC. Click on this to open the browser to see the [LmRaC Homepage](#LmRaC-Homepage).
 3. **Stop container:** Once you are done running LmRaC you can clean up be stopping the running container. This frees up CPU and memory on the host.
 4. **Delete container:** Stopped containers exist until you delete them since they can be re-started. Note that deleting a container *does not* delete or otherwise affect the image it was created from.
 
@@ -232,48 +232,51 @@ The LmRaC homepage allows the user to interact with LmRaC as well as open sub-wi
 
 ![](img/LmRaC_main.png)
 
-1.  **LmRaC message area** shows all messages from LmRaC as well as user commands and questions.
-2.  **User input area** is where the user initiates questions and command to LmRaC.
-3.  **Submit** button sends the user input to LmRaC.
-4.  **Submit on ENTER** checkbox allows the user to send input simply by pressing the Enter key in the user input area (same as clicking on the Submit button).
-5.  **Help** button prompts the user to type "help" in the user input area.
-6.  **Erase** button clears the LmRaC message area.
-7.  **Download** button allows the user to download the entire contents of the LmRaC message area to a file.
-8.  **Answers** icon opens the Answers window from which all saved answers can be viewed.
-9.  **Experiments** button opens the Experiments window which shows all available experiments.
-10. **Indexes** button opens the Indexes window which shows all available indexes.
-11. **Functions** button opens the Functions window which shows all available function libraries.
+1.  **LmRaC message area:** Shows all messages from LmRaC as well as user commands and questions.
+2.  **User input area:** Where the user types questions and commands for LmRaC.
+3.  **Submit:** Button to send the user input to LmRaC.
+4.  **Submit on ENTER:** Checkbox that allows the user to send input simply by pressing the Enter key in the user input area (same as clicking on the Submit button). Uncheck this if you want to include linefeeds in your input.
+5.  **Help:** Button to prompt the user to type "help" in the user input area.
+6.  **Erase:** Button to clear the LmRaC message area.
+7.  **Download:** Button to allow the user to download the entire contents of the LmRaC message area to a file.
+8.  **Answers:** Button to open the Answers window from which all saved answers can be viewed.
+9.  **Experiments:** Button to open the Experiments window which shows all available experiments.
+10. **Indexes:** Button to open the Indexes window which shows all available indexes.
+11. **Functions** Button to open the Functions window which shows all available function libraries.
 
 ### Commands
 Although the user input area is typically used to ask questions, it can also be used to enter commands. LmRac understands the following commands:
 
-- **Help**
-  - **General** A summary of available help.
-  - **Indexes** General information about indexes.
-  - **Experiments** General information about experiments. 
-  - **Functions** General information about functions.
-  - **Questions** General information about asking questions.
-  - **Examples** Some sample questions you can ask.
-- **General Questions** How to ask general questions about biology.
-- **Experiment Questions** How to ask questions about experiments and their data. 
-- **Indexes**
-  - **Set Current Index** Set/create the index for answering questions.
-  - **Show Current Index** Show the name of the current index.
-  - **List Indexes** List the available indexes.
-- **Experiments**
-  - **Set Current Experiment** Set/create an experiment folder.
-  - **Show Current Experiment** Show the name of the current experiment.
-  - **List Experiments** List the available experiments.
-- **Functions**
-  - **Load Function** Make a function library unavailable for question answering.
-  - **Unload Function** Make a function library available for question answering.
-  - **List Available Functions** List function libraries that have been successfully compiled and are available to be loaded.
-  - **List Loaded Functions** List function libraries that will be used when answering questions.
+- **Help Commands:**
+  - **Help** A summary of available help.
+  - **Help indexes** General information about indexes.
+  - **Help experiments** General information about experiments. 
+  - **Help functions** General information about functions.
+  - **Help questions** General information about asking questions.
+  - **Help examples** Some sample questions you can ask.
+  
+- **Index Commands:**
+  - **Set current index** Set/create the index for answering questions.
+  - **Show current index** Show the name of the current index.
+  - **List indexes** List the available indexes.
+  
+- **Experiment Commands:**
+  - **Set current experiment** Set/create an experiment folder.
+  - **Show current experiment** Show the name of the current experiment.
+  - **List experiments** List the available experiments.
+  
+- **Function Commands:**
+  - **Load function** Make a function library unavailable for question answering.
+  - **Unload function** Make a function library available for question answering.
+  - **List available functions** List function libraries that have been successfully compiled and are available to be loaded.
+  - **List loaded functions** List function libraries that will be used when answering questions.
   - **Set REST API IP** Set the IP and port on which LmRaC will make function requests to the user-defined REST API server.
-- **Show Configuration** Show the current configuration and settings.
-- **Load Experiment Documents** Manually load and compute embeddings for a document then save it to an experiment.
-- **Enable/Disable Debug Messages** Show verbose function calls and intermediate results. Can be useful for rephrasing more complex questions.
-- **Quit** Save the current configuration and shutdown the homepage and server.
+  
+- **Other Commands:**
+  - **Show Configuration** Show the current configuration and settings.
+  - **Load Experiment Documents** Manually load and compute embeddings for a document then save it to an experiment.
+  - **Enable/Disable Debug Messages** Show verbose function calls and intermediate results. Can be useful for rephrasing more complex questions.
+  - **Quit** Save the current configuration and shutdown the homepage and server.
 
 Note that commands should be asked one at a time. Also, LmRaC currently does not remember previous commands or questions.
 
