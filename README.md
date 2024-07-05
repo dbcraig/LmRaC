@@ -162,7 +162,7 @@ If you're running on Linux then you have the option of installing the command-li
 
 #### Install Docker Engine
 
-xxx
+Installation instructions for Linux distros can be found at  [Install Docker Engine](https://docs.docker.com/engine/install/)
 
 #### Pull and run the latest LmRaC image
 
@@ -176,7 +176,13 @@ Open the [LmRaC Homepage](#LmRaC-Homepage) from <http://localhost:5000>.
 
 ### Docker Desktop (Linux / Mac / Windows)
 
-xxx
+#### Install Docker Desktop
+
+For instructions on how to install Docker Desktop, see:
+
+- [Docker Desktop for Linux](https://docs.docker.com/desktop/install/linux-install/)
+- [Docker Desktop for Mac (macOS)](https://docs.docker.com/desktop/install/mac-install/)
+- [Docker Desktop for Windows](https://docs.docker.com/desktop/install/windows-install/)
 
 #### Pull the latest LmRaC image
 
@@ -274,7 +280,7 @@ Although the user input area is typically used to ask questions, it can also be 
   
 #### Other Commands
 - **Show configuration**  Show the current configuration and settings.
-- **Load experiment documents to** *\<experiment-name\>*  Manually load and compute embeddings for a document then save it to an experiment.
+- **Load experiment documents to** *\<experiment-name\>*  Manually load and compute embeddings for a document then save it to an experiment. User will be prompted for the file name.
 - **Enable/Disable debug messages**  Show verbose function calls and intermediate results. Can be useful for rephrasing more complex questions.
 - **Quit**  Save the current configuration and shutdown the homepage and server.
 
