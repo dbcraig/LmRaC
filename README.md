@@ -256,26 +256,26 @@ Although the user input area is typically used to ask questions, it can also be 
 - **Help examples** Some sample questions you can ask.
   
 #### Index Commands
-- **Set current index** Set/create the index for answering questions.
+- **Set current index to** *<index-name>* Set/create the index for answering questions.
 - **Show current index** Show the name of the current index.
 - **List indexes** List the available indexes.
   
 #### Experiment Commands
-- **Set current experiment** Set/create an experiment folder.
+- **Set current experiment to** *<experiment-name>* Set/create an experiment folder.
 - **Show current experiment** Show the name of the current experiment.
 - **List experiments** List the available experiments.
   
 #### Function Commands
-- **Load function** Make a function library unavailable for question answering.
-- **Unload function** Make a function library available for question answering.
+- **Load function** *<function-name>* Make a function library unavailable for question answering.
+- **Unload function** *<function-name>* Make a function library available for question answering.
 - **List available functions** List function libraries that have been successfully compiled and are available to be loaded.
 - **List loaded functions** List function libraries that will be used when answering questions.
 - **Set REST API IP** Set the IP and port on which LmRaC will make function requests to the user-defined REST API server.
   
 #### Other Commands
-- **Show Configuration** Show the current configuration and settings.
-- **Load Experiment Documents** Manually load and compute embeddings for a document then save it to an experiment.
-- **Enable/Disable Debug Messages** Show verbose function calls and intermediate results. Can be useful for rephrasing more complex questions.
+- **Show configuration** Show the current configuration and settings.
+- **Load experiment documents to** *<experiment-name>* Manually load and compute embeddings for a document then save it to an experiment.
+- **Enable/Disable debug messages** Show verbose function calls and intermediate results. Can be useful for rephrasing more complex questions.
 - **Quit** Save the current configuration and shutdown the homepage and server.
 
 Note that commands should be asked one at a time. Also, LmRaC currently does not remember previous commands or questions.
