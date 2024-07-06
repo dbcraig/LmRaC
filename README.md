@@ -439,16 +439,18 @@ The context is simply an index, like those created for general questions, that f
 
 ### Experimental Results
 
-For example, assume you have an experiment where you have measured differentially expressed genes (DEG) between affected subjects and unaffected subjects. Typically, this type of experiment results in a file that contains all measured genes, how much they changed between experimental conditions, and if this change was statistically significant. You could ask:
+For example, assume you have an experiment where you have measured differentially expressed genes (DEG) between affected (disease) and unaffected (control) subjects. Typically, this type of experiment results in a file that contains all measured genes, how much they changed between experimental conditions, and the statistical significance of this change. You could ask:
 
 ```
 [user]  What is the expression of BRCA1 in my experiment?
-[LmRaC] The expression of the gene **BRCA1** in your experiment "greatStuff" is as follows:
-- **Log Fold Change (logFC):** 1.488
-- **Adjusted p-value (adjP):** 0.000001
+[LmRaC] The expression of the gene BRCA1 in your experiment "greatStuff" is as follows:
+- Log Fold Change (logFC): 1.488
+- Adjusted p-value (adjP): 0.000001
 ```
 
+LmRaC first notices that this is a question about your experiment. Internally it identifies the current experiment as "greatStuff." Then, in attempting to determine the expression of the gene BRCA1 it finds a loaded user-function with the description "Return gene expression results for a list of genes from an experiment." It creates a list with BRCA1 as the only gene and calls the function. The function reads the DEG results, finds all genes in the list, and returns their expression. LmRaC completes its answer as above.
 
+See [Usage: User-Defined Functions](#Usage---User-Defined-Functions) for how to create your own functions.
 
 ### Creating an experimental context
 
