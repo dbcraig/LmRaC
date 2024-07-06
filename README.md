@@ -21,10 +21,10 @@ LmRaC uses a multi-tier retrieval-augmented generation (RAG) design to index: do
 > ### Application Windows & Configuration
 > 
 > * [LmRaC Homepage](#LmRaC-Homepage)
-> * [Indexes](#Indexes)
-> * [Experiments](#Experiments)
-> * [Functions](#Functions)
-> * [Answers](#Answers)
+> * [Indexes Window](#Indexes-Window)
+> * [Experiments Window](#Experiments-Window)
+> * [Functions Window](#Functions-Window)
+> * [Answers Window](#Answers-Window)
 > * [Configuration](#Configuration)
 
 > ### Usage, Workflow & Troubleshooting
@@ -140,7 +140,7 @@ Retrieving document metadata from PubMed
 
 Answers are displayed during processing and saved in the *sessions/finalAnswers/* directory along with information about the original query, generated sub-queries, references for the answer and a GPT4 assessment of the final answer.
 
-To view the final answer (and its quality assessment) open the [Answers](#Answers) window by clicking on the Answers icon of the ([LmRaC Homepage](#LmRaC-Homepage)). From the Answers window answers can be viewed as markdown, HTML, downloaded, and/or saved to experiments as supplemental experiment documents.
+To view the final answer (and its quality assessment) open the [Answers Window](#Answers-Window) by clicking on the Answers icon of the ([LmRaC Homepage](#LmRaC-Homepage)). From the Answers window answers can be viewed as markdown, HTML, downloaded, and/or saved to experiments as supplemental experiment documents.
 
 ### Quitting LmRaC
 
@@ -148,7 +148,7 @@ Exit LmRaC by typing "bye" or "exit" or "adios" in whatever language you prefer.
 
 ### Next steps
 
-Once you've asked some questions and received answers, you'll probably want to setup experiments into which you can save answers and upload quantitative results. You can then ask questions about your own experimental results! See [Experiments](#Experiments) and [Functions](#Functions) for more details.
+Once you've asked some questions and received answers, you'll probably want to setup experiments into which you can save answers and upload quantitative results. You can then ask questions about your own experimental results! See [Experiments](#Experiments-Window) and [Functions](#Functions-Window) for more details.
 
 ------------------------------------------------------------------------
 
@@ -288,37 +288,51 @@ Note that commands should be asked one at a time. Also, LmRaC currently does not
 
 ------------------------------------------------------------------------
 
-## Indexes
+## Indexes Window
 
 The Indexes window can be opened by clicking on the Indexes button on the [LmRaC Homepage](#LmRaC-Homepage).
 
 ![](img/LmRaC_Indexes.png)
 
-xxx
+Available indexes are listed with the current index, if any, selected. Selecting an index by clicking on its radio button. This is equivalent to asking LmRaC on the [LmRaC Homepage](#LmRaC-Homepage) to set the index.
+
+Hovering over the information icon displays the index description, if any, from when the index was created.
+
+Only one index may be selected at a time.
 
 ------------------------------------------------------------------------
 
-## Experiments
+## Experiments Window
 
 The Experiments window can be opened by clicking on the Experiments button on the [LmRaC Homepage](#LmRaC-Homepage).
 
 ![](img/LmRaC_Experiments.png)
 
-xxx
+Available experiments are listed with the current experiment, if any, selected. Selecting an experiment by clicking on its radio button. This is equivalent to asking LmRaC on the [LmRaC Homepage](#LmRaC-Homepage) to set the experiment.
+
+Hovering over the information icon displays the experiment description, if any, from when the experiment was created.
+
+Clicking on the folder shows the contents of the experiment folder: files in the experiment root, and the *docs/* folder, if any. The *docs/* folder is where saved answers and uploaded experiment documents are saved.
+
+Only one experiment may be selected at a time.
 
 ------------------------------------------------------------------------
 
-## Functions
+## Functions Window
 
 The Functions window can be opened by clicking on the Functions button on the [LmRaC Homepage](#LmRaC-Homepage).
 
 ![](img/LmRaC_Functions.png)
 
-xxx
+Available functions are listed with all loaded functions, if any, checked. Load a function by clicking on its checkbox. This is equivalent to asking LmRaC on the [LmRaC Homepage](#LmRaC-Homepage) to load the function. Unload the function by unchecking.
+
+Hovering over the information icon displays the function description, if any, from the function definition file (*.fn*).
+
+Any number of functions may be loaded. However, keep in mind that all loaded functions are passed to GPT4 when asking any question. This allows GPT4 to make use of any loaded function when answering a question, but increases the number of input tokens. So, if a function is not needed, do not load it. This improves the accuracy of the answer and reduces cost.
 
 ------------------------------------------------------------------------
 
-## Answers
+## Answers Window
 
 The Answers window can be opened by clicking on the Answers icon on the [LmRaC Homepage](#LmRaC-Homepage).
 
@@ -369,7 +383,7 @@ Functions REST API IP   : 172.17.0.2:5001
 
 In addition, default vocabulary files for genes, diseases and pathways will be copied into the vocab/ folder.
 
-When quitting LmRaC the configuration is saved to config/LmRaC.config
+When quitting LmRaC the configuration is saved to *config/LmRaC.config*
 
 ### Markdown Viewing
 
@@ -457,7 +471,17 @@ When the server starts up it will show the IP:port on which it is running.
 
 LmRaC must know this IP:port in order to make function requests. You can edit the LmRaC.config file (see [Configuration](#configuration)) so that the *functionsREST* key value is set to IP:port (e.g., "172.17.0.2:5001") or you can set the IP:port dynamically be asking LmRaC to set the value (e.g., "Please set the functions REST API IP and port to 172.17.0.2:5001")
 
-### Adding Functions
+### Adding Functions (Server - REST Server)
+
+xxx
+See DEGbasic.py
+
+Required parts:
+
+- xx
+- xx
+
+### Using Functions (Client - LmRaC)
 
 xxx
 
@@ -486,9 +510,18 @@ FUNCTION getTopExpressionResults    "This text describes the what the function d
         ITEM gene:STRING            "array items begin with the ITEM keyword"
 ```
 
-### Using Functions
+#### Function compilation
+
+xxx
+
+#### Function loading
 
 xxx Load the function ... it will be used based on the description
+
+xxx Errors when loading... LmRaC tests that the JSON is well formed
+... show (!) message ?
+
+Why unload a function
 
 ### General Functions
 
