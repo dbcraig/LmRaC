@@ -435,11 +435,11 @@ A key feature of LmRaC is its ability to answer questions about a user's own exp
 - a user-defined experimental context of documents and data
 - user-defined functions that answer questions about that data
 
-The context is simply an index, like those created for general questions, that focuses on information about the experiment. Function are user provided code that retrieves or otherwise manipulates data so that it is available to answer a question. A user needed "call" the function explicitly, he or she need only describe it and then leave it to LmRaC to use the function if it will aid in answering a question.
+The context is simply an index, like those created for general questions, that focuses on information about the experiment. Functions are user provided code that retrieves or otherwise manipulates data so that it is available to answer a question. A user needn't "call" the function explicitly, he or she need only describe it and then leave it to LmRaC to use the function if it will aid in answering the question.
 
 ### Experimental Results
 
-For example, assume you have an experiment where you have measured differentially expressed genes (DEG) between affected (disease) and unaffected (control) subjects. Typically, this type of experiment results in a file that contains all measured genes, how much they changed between experimental conditions, and the statistical significance of this change. You could ask:
+For example, assume you have an experiment where you have measured differentially expressed genes (DEG) between affected (disease) and unaffected (control) subjects. Typically, this type of experiment results in a file that contains all measured genes, how much they changed between experimental conditions, and the statistical significance of that change. You could ask:
 
 ```
 [user]  What is the expression of BRCA1 in my experiment?
@@ -448,7 +448,7 @@ For example, assume you have an experiment where you have measured differentiall
 - Adjusted p-value (adjP): 0.000001
 ```
 
-LmRaC first notices that this is a question about your experiment. Internally it identifies the current experiment as "greatStuff." Then, in attempting to determine the expression of the gene BRCA1 it finds a loaded user-function with the description "Return gene expression results for a list of genes from an experiment." It creates a list with BRCA1 as the only gene and calls the function. The function reads the DEG results, finds all genes in the list, and returns their expression. LmRaC completes its answer as above.
+LmRaC first notices that this is a question about your experiment. Internally it identifies the current experiment as "greatStuff." Then, in attempting to determine the expression of the gene BRCA1 it finds a loaded user-function with the description "Return gene expression results for a list of genes from an experiment." It creates a list with BRCA1 as the only gene and calls the function. The function reads the DEG results, finds BRCA1, and returns its expression. LmRaC incorporates this into the answer above.
 
 See [Usage: User-Defined Functions](#Usage---User-Defined-Functions) for how to create your own functions.
 
@@ -473,6 +473,40 @@ Documents can also be uploaded to experiments manually. Simply ask LmRaC to "loa
 Although it is possible to simply copy documents into the experiment's *docs/* folder, embeddings will not be computed, therefore, the documents are not searchable when asking questions about the experiment. Use the "load experiment documents" command to make the document available for search.
 
 **IMPORTANT** Docker containers can only see directories that have been mounted using the **-v** command. This means the path to upload documents is relative to the container's mount point. For example, if you run the LmRaC container with **-v $(pwd)/work:/app/user**, LmRaC can only see folders in the work/ directory tree. These are referenced in the container as */app/user*. So, if you want to load a document from *work/my-docs/experimentInfo.txt*, the full path when using the LmRaC load command would be */app/user/my-docs/experimentInfo.txt*.
+
+### Putting it all together
+
+First, create an experimental context for the doug1 experiment:
+
+```
+[user]  Describe the expression patterns of BRCA1 in breast cancer
+```
+
+Save this answer to the doug1 *docs/* using the [Answers Window](#Answers-Window).
+
+Now, ask how my particular DEG results might be interpreted with respect to this context:
+
+```
+[user]  What is the expression of BRCA1 in my experiment doug1?
+My experiment is studying breast cancer.
+How might this expression be interpreted with respect to what the doug1 experimental documents say about BRCA1 and breast cancer?
+[LmRaC] The expression data for BRCA1 in your experiment "doug1" shows the following:
+
+- **Log Fold Change (logFC)**: 1.488
+- **Adjusted p-value (adjpv)**: 0.000001
+
+### Interpretation:
+1. **Log Fold Change (logFC)**: A logFC of 1.488 indicates that BRCA1 is upregulated in your breast cancer samples compared to the control. This means that the expression level of BRCA1 is higher in the breast cancer tissues.
+
+2. **Adjusted p-value (adjpv)**: The very low adjusted p-value (0.000001) suggests that this upregulation is statistically significant, meaning it is highly unlikely to be due to random chance.
+
+### Contextual Interpretation:
+BRCA1 (Breast Cancer 1) is a well-known tumor suppressor gene. Mutations in BRCA1 are associated with an increased risk of breast and ovarian cancers. However, the upregulation of BRCA1 in your experiment could indicate a cellular response to DNA damage or stress, as BRCA1 is involved in DNA repair mechanisms.
+
+In the context of breast cancer, the upregulation of BRCA1 might be a compensatory mechanism where the cells are trying to repair DNA damage more actively. Alternatively, it could reflect a specific subtype of breast cancer where BRCA1 expression is higher.
+
+To fully understand the implications, you should refer to the specific experimental documents of "doug1" to see how BRCA1 expression is discussed in relation to breast cancer. The documents might provide insights into whether this upregulation is consistent with previous findings or if it suggests a novel aspect of BRCA1's role in breast cancer in your specific experimental conditions.
+```
 
 ------------------------------------------------------------------------
 
