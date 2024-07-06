@@ -21,6 +21,7 @@ LmRaC uses a multi-tier retrieval-augmented generation (RAG) design to index: do
 > ### Application Windows & Configuration
 > 
 > * [LmRaC Homepage](#LmRaC-Homepage)
+>   * [Commands](#Commands)
 > * [Indexes Window](#Indexes-Window)
 > * [Experiments Window](#Experiments-Window)
 > * [Functions Window](#Functions-Window)
@@ -295,7 +296,7 @@ The Indexes window can be opened by clicking on the Indexes button on the [LmRaC
 
 ![](img/LmRaC_Indexes.png)
 
-Available indexes are listed with the current index, if any, selected. Selecting an index by clicking on its radio button. This is equivalent to asking LmRaC on the [LmRaC Homepage](#LmRaC-Homepage) to set the index.
+Available indexes are listed with the current index, if any, selected. Select an index by clicking on its radio button. This is equivalent to asking LmRaC on the [LmRaC Homepage](#LmRaC-Homepage) to set the index.
 
 Hovering over the information icon displays the index description, if any, from when the index was created.
 
@@ -309,11 +310,11 @@ The Experiments window can be opened by clicking on the Experiments button on th
 
 ![](img/LmRaC_Experiments.png)
 
-Available experiments are listed with the current experiment, if any, selected. Selecting an experiment by clicking on its radio button. This is equivalent to asking LmRaC on the [LmRaC Homepage](#LmRaC-Homepage) to set the experiment.
+Available experiments are listed with the current experiment, if any, selected. Select an experiment by clicking on its radio button. This is equivalent to asking LmRaC on the [LmRaC Homepage](#LmRaC-Homepage) to set the experiment.
 
 Hovering over the information icon displays the experiment description, if any, from when the experiment was created.
 
-Clicking on the folder shows the contents of the experiment folder: files in the experiment root, and the *docs/* folder, if any. The *docs/* folder is where saved answers and uploaded experiment documents are saved.
+Clicking on the folder icon shows the contents of the experiment folder: files in the experiment root, and the *docs/* folder, if any. The *docs/* folder is where [saved answers](#Saving-Answers-to-Experiments) and [uploaded experiment documents](#Manual-document-upload) are saved.
 
 Only one experiment may be selected at a time.
 
@@ -327,9 +328,9 @@ The Functions window can be opened by clicking on the Functions button on the [L
 
 Available functions are listed with all loaded functions, if any, checked. Load a function by clicking on its checkbox. This is equivalent to asking LmRaC on the [LmRaC Homepage](#LmRaC-Homepage) to load the function. Unload the function by unchecking.
 
-Hovering over the information icon displays the function description, if any, from the function definition file (*.fn*).
+Hovering over the information icon displays the function DESCRIPTION, if any, from the function definition file (*.fn*).
 
-Any number of functions may be loaded. However, keep in mind that all loaded functions are passed to GPT4 when asking any question. This allows GPT4 to make use of any loaded function when answering a question, but increases the number of input tokens. So, if a function is not needed, do not load it. This improves the accuracy of the answer and reduces cost.
+Any number of functions may be loaded. However, keep in mind that all loaded functions are passed to GPT4 when asking *any* question. This allows GPT4 to make use of any loaded function when answering a question, but increases the number of input tokens. So, if a function is not needed, do not load it. This improves the accuracy of the answer and reduces cost.
 
 ------------------------------------------------------------------------
 
@@ -353,13 +354,14 @@ Once you select one or more answers (by clicking on the test tube), the answers 
 
 ![](img/LmRaC_Answers_save.png)
 
-**Select Answers:** Click on the test tube next to the answer you want to add. The test tube will be highlighted with a check mark. You may select as many answers as you wish (see Red highlight).
+### Saving Answers to Experiments
+Click on the test tube next to the answer you want to add. The test tube will be highlighted with a check mark. You may select as many answers as you wish (see Red outline).
 
-1. Select the destination experiment name (the current experiment, if any, will have an '*' next to its name).
-2. Select the index for the document embeddings. Remember that these documents will only be searchable when this index set as current.
-3. Once both the experiment and index have been selected, click on the copy documents icon.
+1. Select the destination Experiment name (the current experiment, if any, will have an '*' next to its name).
+2. Select the Index for the document embeddings. Remember that these documents will only be searchable when this index set as current.
+3. Once both the Experiment and Index have been selected, click on the copy documents icon.
 
-Answers are copied to the experiment and added to the index (i.e., embeddings computed) in the background. This typically takes less than a minute to complete.
+Answers are copied to the experiment *docs/* folder and added to the index (i.e., embeddings computed) in the background. This typically takes less than a minute to complete.
 
 ------------------------------------------------------------------------
 
@@ -428,23 +430,33 @@ When a term is not recognized (i.e., no embedding has the identifier as metadata
 
 ## Usage - Experiments
 
+xxx
+
 ### Experimental Results
 
 xxx DEG example
 
 ### Creating an experimental context
 
-xxx
+When asking questions about experiments LmRaC will first search for documents indexed for the experiment. This means documents in the experiments *docs/* folder. These are either saved answers or uploaded documents. In either case these documents have been copied to the *docs/* folder and, most importantly, had their embeddings computed so that they are available for search.
+
+Creating a context, therefore, means creating a group of documents that provide a focused knowledge base relative to the experiment. This can be background documents on genes, pathways and diseases generated from general questions. It can also include relevant protocol or other background documents that provide details relevant to interpreting your experimental results.
+
+Importantly, one of the strengths of LmRaC is that though it will use this experimental context, it can also search the general literature. Keep this in mind when formulating your questions.
+
+**IMPORTANT** Experiment documents are "authoritative" when asking experimental questions. LmRaC does not implicitly use GPT4 to validate or otherwise confirm the veracity of any document that is uploaded. Therefore, for example, if you upload experiment documents that provide evidence that the world is flat, expect answers to use this "fact." You are the author of your experimental findings!
 
 #### Saving Answers to Experiments
 
-Keep in mind that when an answer is saved to an experiment, the text of the answer is saved in the experiment directory, but the embeddings (i.e., searchable meaning) are saved in an index along with metadata that links it to the experiment. When asking questions about the experiment, you must use this index.
+From the [Answers Window](#Answers-Window) select any answers you want saved to a specific experiment. Select an index. Click on the copy documents icon. Keep in mind that when an answer is saved to an experiment, the text of the answer is saved in the experiment directory, but the embeddings (i.e., searchable meaning) are saved in an index along with metadata that links it to the experiment. When asking questions about the experiment, you must use this index.
 
-saving answers to experiment from Answers dialog
+#### Manual document upload
 
-#### Manual upload
+Documents can also be uploaded to experiments manually. Simply ask LmRaC to "load experiment document to *< experiment >*". You will be prompted for the document name. Once copied to the experiment's *docs/* folder, embeddings will be computed and added to the current index. This makes the document available for questions. 
 
-xxx Using the LmRaC interface to load ... so embeddings are created
+Although it is possible to simply copy documents into the experiment's *docs/* folder, embeddings will not be computed, therefore, the documents are not searchable when asking questions about the experiment. Use the "load experiment documents" command to make the document available.
+
+**IMPORTANT** Docker containers can only see directories that have been mounted using the **-v** command. This means the path to upload documents is relative to the container's mount point. For example, if you run the LmRaC container with **-v $(pwd)/work:/app/user**, LmRaC can only see folders in the work/ directory tree, **and** these are referenced in the path */app/user*. So, if you want to load a document from *work/my-docs/experimentInfo.txt* the full path when using the LmRaC load command would be */app/user/my-docs/experimentInfo.txt*.
 
 ------------------------------------------------------------------------
 
@@ -559,7 +571,7 @@ Likewise, functions are designed to manipulate your data (e.g., read, search, co
 
 ## How To Cite
 
-*Coming Soon!*
+*Coming Soon!* Currently under review.
 
 ## Contact
 
