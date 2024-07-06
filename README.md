@@ -520,12 +520,9 @@ LmRaC provides the following answer:
 
 ## Usage - User-Defined Functions
 
-xxx
-Key to LmRaC is its easy extensibility, that is, the user's ability to add functionality ...
-... not only data manipulation, but also API interface to other resources
-making this information immediately available for answering questions
+LmRaC functionality is designed to be easily extensible. That is, the range of questions that LmRaC can answer is only constrained by the imagination (and industriousness) of the user. Though primarily intended to facilitate access to user data and results, user-defined functions can also be used to interface to any other resource whether static (e.g., database or resource API) or dynamic (e.g., instrumentation, sensing).
 
-A complete functional API is provided in this GitHub repository...
+A complete functional prototype of the REST API is provided in this GitHub repository in the [RESTserver](RESTserver/) folder.
 
 ### Quick Start
 
