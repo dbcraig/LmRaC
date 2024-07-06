@@ -438,7 +438,7 @@ xxx DEG example
 
 ### Creating an experimental context
 
-When asking questions about experiments LmRaC will first search for documents indexed for the experiment. This means documents in the experiments *docs/* folder. These are either saved answers or uploaded documents. In either case these documents have been copied to the *docs/* folder and, most importantly, had their embeddings computed so that they are available for search.
+When asking questions about experiments LmRaC will first search for documents indexed for the experiment. This means documents in the experiment's *docs/* folder. These are either saved answers or uploaded documents (see below). In either case these documents have been copied to the *docs/* folder and, most importantly, had their embeddings computed so that they are available for search.
 
 Creating a context, therefore, means creating a group of documents that provide a focused knowledge base relative to the experiment. This can be background documents on genes, pathways and diseases generated from general questions. It can also include relevant protocol or other background documents that provide details relevant to interpreting your experimental results.
 
@@ -454,9 +454,9 @@ From the [Answers Window](#Answers-Window) select any answers you want saved to 
 
 Documents can also be uploaded to experiments manually. Simply ask LmRaC to "load experiment document to *< experiment >*". You will be prompted for the document name. Once copied to the experiment's *docs/* folder, embeddings will be computed and added to the current index. This makes the document available for questions. 
 
-Although it is possible to simply copy documents into the experiment's *docs/* folder, embeddings will not be computed, therefore, the documents are not searchable when asking questions about the experiment. Use the "load experiment documents" command to make the document available.
+Although it is possible to simply copy documents into the experiment's *docs/* folder, embeddings will not be computed, therefore, the documents are not searchable when asking questions about the experiment. Use the "load experiment documents" command to make the document available for search.
 
-**IMPORTANT** Docker containers can only see directories that have been mounted using the **-v** command. This means the path to upload documents is relative to the container's mount point. For example, if you run the LmRaC container with **-v $(pwd)/work:/app/user**, LmRaC can only see folders in the work/ directory tree, **and** these are referenced in the path */app/user*. So, if you want to load a document from *work/my-docs/experimentInfo.txt* the full path when using the LmRaC load command would be */app/user/my-docs/experimentInfo.txt*.
+**IMPORTANT** Docker containers can only see directories that have been mounted using the **-v** command. This means the path to upload documents is relative to the container's mount point. For example, if you run the LmRaC container with **-v $(pwd)/work:/app/user**, LmRaC can only see folders in the work/ directory tree. These are referenced in the container as */app/user*. So, if you want to load a document from *work/my-docs/experimentInfo.txt*, the full path when using the LmRaC load command would be */app/user/my-docs/experimentInfo.txt*.
 
 ------------------------------------------------------------------------
 
