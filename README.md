@@ -482,31 +482,37 @@ First, create an experimental context for the doug1 experiment:
 [user]  Describe the expression patterns of BRCA1 in breast cancer
 ```
 
-Save this answer to the doug1 *docs/* using the [Answers Window](#Answers-Window).
+Save this answer to the doug1 experiment *docs/* using the [Answers Window](#Answers-Window). Index the answer using the dougi1 index.
 
 Now, ask how my particular DEG results might be interpreted with respect to this context:
 
 ```
+[user]  set experiment = doug1
+[user]  set index = dougi1
 [user]  What is the expression of BRCA1 in my experiment doug1?
-My experiment is studying breast cancer.
-How might this expression be interpreted with respect to what the doug1 experimental documents say about BRCA1 and breast cancer?
-[LmRaC] The expression data for BRCA1 in your experiment "doug1" shows the following:
-
-- **Log Fold Change (logFC)**: 1.488
-- **Adjusted p-value (adjpv)**: 0.000001
-
-### Interpretation:
-1. **Log Fold Change (logFC)**: A logFC of 1.488 indicates that BRCA1 is upregulated in your breast cancer samples compared to the control. This means that the expression level of BRCA1 is higher in the breast cancer tissues.
-
-2. **Adjusted p-value (adjpv)**: The very low adjusted p-value (0.000001) suggests that this upregulation is statistically significant, meaning it is highly unlikely to be due to random chance.
-
-### Contextual Interpretation:
-BRCA1 (Breast Cancer 1) is a well-known tumor suppressor gene. Mutations in BRCA1 are associated with an increased risk of breast and ovarian cancers. However, the upregulation of BRCA1 in your experiment could indicate a cellular response to DNA damage or stress, as BRCA1 is involved in DNA repair mechanisms.
-
-In the context of breast cancer, the upregulation of BRCA1 might be a compensatory mechanism where the cells are trying to repair DNA damage more actively. Alternatively, it could reflect a specific subtype of breast cancer where BRCA1 expression is higher.
-
-To fully understand the implications, you should refer to the specific experimental documents of "doug1" to see how BRCA1 expression is discussed in relation to breast cancer. The documents might provide insights into whether this upregulation is consistent with previous findings or if it suggests a novel aspect of BRCA1's role in breast cancer in your specific experimental conditions.
+        My experiment is studying breast cancer.
+        How might this expression be interpreted with respect to what the doug1 experimental documents say about BRCA1 and breast cancer?
 ```
+
+LmRaC Answer:
+
+> [LmRaC] The expression data for BRCA1 in your experiment "doug1" shows the following:
+> 
+> - **Log Fold Change (logFC)**: 1.488
+> - **Adjusted p-value (adjpv)**: 0.000001
+> 
+> ### Interpretation:
+> 1. **Log Fold Change (logFC)**: A logFC of 1.488 indicates that BRCA1 is upregulated in your breast cancer samples compared to the control. This means that the expression level of BRCA1 is higher in the breast cancer tissues.
+> 
+> 2. **Adjusted p-value (adjpv)**: The very low adjusted p-value (0.000001) suggests that this upregulation is statistically significant, meaning it is highly unlikely to be due to random chance.
+>
+> ### Contextual Interpretation:
+> BRCA1 (Breast Cancer 1) is a well-known tumor suppressor gene. Mutations in BRCA1 are associated with an increased risk of breast and ovarian cancers. However, the upregulation of BRCA1 in your experiment could indicate a cellular response to DNA damage or stress, as BRCA1 is involved in DNA repair mechanisms.
+> 
+> In the context of breast cancer, the upregulation of BRCA1 might be a compensatory mechanism where the cells are trying to repair DNA damage more actively. Alternatively, it could reflect a specific subtype of breast cancer where BRCA1 expression is higher.
+> 
+> To fully understand the implications, you should refer to the specific experimental documents of "doug1" to see how BRCA1 expression is discussed in relation to breast cancer. The documents might provide insights into whether this upregulation is consistent with previous findings or if it suggests a novel aspect of BRCA1's role in breast cancer in your specific experimental conditions.
+>
 
 ------------------------------------------------------------------------
 
