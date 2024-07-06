@@ -488,13 +488,15 @@ Now, ask how my particular DEG results might be interpreted with respect to this
 
 ```
 [user]  set experiment = doug1
+...
 [user]  set index = dougi1
+...
 [user]  What is the expression of BRCA1 in my experiment doug1?
         My experiment is studying breast cancer.
         How might this expression be interpreted with respect to what the doug1 experimental documents say about BRCA1 and breast cancer?
 ```
 
-LmRaC Answer:
+LmRaC provides the following answer:
 
 > [LmRaC] The expression data for BRCA1 in your experiment "doug1" shows the following:
 > 
@@ -525,6 +527,24 @@ making this information immediately available for answering questions
 
 A complete functional API is provided in this GitHub repository...
 
+### Quick Start
+
+If you want to try the REST server without building it, a Docker image is provided. Keep in mind that this example has limited functionality, but it will give you a quick way to try functions.
+
+**NOTE** this Docker image has been build from the GitHub repository example server described below.
+
+Pull the latest tagged image from Docker Hub. Run LmRaC REST using Docker Engine. If Docker is not installed or you're using Docker Desktop, see the [Installation](#Installation) instructions below. This example server does not use any API keys.
+
+**IMPORTANT** you must mount the same local directory as was used for LmRaC otherwise the REST API will be looking in a directory different from LmRaC. Also, notice that the REST server is on a different port than LmRaC, 5001.
+
+```         
+docker pull dbcraig/lmracrest:latest
+cd <your-lmrac-root>
+docker run -it -v $(pwd)/work:/app/user -p 5001:5001 dbcraig/lmracrest
+```
+
+On startup the LmRaC REST server will print the IP:port it is running on. Make sure that this matches the LmRaC configuration otherwise LmRaC requests will not be received by the REST server.
+
 ### Setting up the REST API Server
 
 Clone the base REST API server from this GitHub repository, then build the Docker image for the functions server.
@@ -544,12 +564,6 @@ docker run -it -v $(pwd)/work:/app/user -p 5001:5001 lmracrest
 When the server starts up it will show the IP:port on which it is running.
 
 LmRaC must know this IP:port in order to make function requests. You can edit the LmRaC.config file (see [Configuration](#configuration)) so that the *functionsREST* key value is set to IP:port (e.g., "172.17.0.2:5001") or you can set the IP:port dynamically be asking LmRaC to set the value (e.g., "Please set the functions REST API IP and port to 172.17.0.2:5001")
-
-#### REST API Server Docker image
-
-xxx
-If you want to try the server without building it...
-this is a built version of what is in the source repository, so only has basic functionality
 
 ### Adding Functions (Server - REST Server)
 
