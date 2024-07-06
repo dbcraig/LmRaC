@@ -430,11 +430,25 @@ When a term is not recognized (i.e., no embedding has the identifier as metadata
 
 ## Usage - Experiments
 
-xxx
+A key feature of LmRaC is its ability to answer questions about a user's own experiments and data. Two components make this possible:
+
+- a user-defined experimental context of documents and data
+- user-defined functions that answer questions about that data
+
+The context is simply an index, like those created for general questions, that focuses on information about the experiment. Function are user provided code that retrieves or otherwise manipulates data so that it is available to answer a question. A user needed "call" the function explicitly, he or she need only describe it and then leave it to LmRaC to use the function if it will aid in answering a question.
 
 ### Experimental Results
 
-xxx DEG example
+For example, assume you have an experiment where you have measured differentially expressed genes (DEG) between affected subjects and unaffected subjects. Typically, this type of experiment results in a file that contains all measured genes, how much they changed between experimental conditions, and if this change was statistically significant. You could ask:
+
+```
+[user]  What is the expression of BRCA1 in my experiment?
+[LmRaC] The expression of the gene **BRCA1** in your experiment "greatStuff" is as follows:
+- **Log Fold Change (logFC):** 1.488
+- **Adjusted p-value (adjP):** 0.000001
+```
+
+
 
 ### Creating an experimental context
 
@@ -463,6 +477,11 @@ Although it is possible to simply copy documents into the experiment's *docs/* f
 ## Usage - User-Defined Functions
 
 xxx
+Key to LmRaC is its easy extensibility, that is, the user's ability to add functionality ...
+... not only data manipulation, but also API interface to other resources
+making this information immediately available for answering questions
+
+A complete functional API is provided in this GitHub repository...
 
 ### Setting up the REST API Server
 
@@ -483,6 +502,12 @@ docker run -it -v $(pwd)/work:/app/user -p 5001:5001 lmracrest
 When the server starts up it will show the IP:port on which it is running.
 
 LmRaC must know this IP:port in order to make function requests. You can edit the LmRaC.config file (see [Configuration](#configuration)) so that the *functionsREST* key value is set to IP:port (e.g., "172.17.0.2:5001") or you can set the IP:port dynamically be asking LmRaC to set the value (e.g., "Please set the functions REST API IP and port to 172.17.0.2:5001")
+
+#### REST API Server Docker image
+
+xxx
+If you want to try the server without building it...
+this is a built version of what is in the source repository, so only has basic functionality
 
 ### Adding Functions (Server - REST Server)
 
