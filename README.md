@@ -148,7 +148,8 @@ Exit LmRaC by typing "bye" or "exit" or "adios" in whatever language you prefer.
 
 ### Next steps
 
-Once you've asked some questions and received answers, you'll probably want to setup experiments into which you can save answers and upload quantitative results. You can then ask questions about your own experimental results! See [Experiments](#Experiments-Window) and [Functions](#Functions-Window) for more details.
+Once you've asked some questions and received answers, you'll probably want to setup experiments into which you can save answers and upload quantitative results. You can then ask questions about your own experimental results! See 
+[Experiments](#Usage---Experiments) and [Functions](#Usage---User-Defined-Functions) for more details.
 
 ------------------------------------------------------------------------
 
