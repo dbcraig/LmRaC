@@ -128,7 +128,7 @@ class DEGbasic:
             print(result)
             return {"experiment":experiment, "pathways": result}  # return experiment for context
         else:
-            return f"Function Error getTopSignificantPathways  Unable to find '{experiment}/{filename}'." 
+            return f"Function Error lmrac_getTopSignificantPathways  Unable to find '{experiment}/{filename}'." 
 
 
     def getPathwayGenes(self, params=None):
