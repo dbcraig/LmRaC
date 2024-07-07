@@ -520,19 +520,19 @@ LmRaC provides the following answer:
 
 ## Usage - User-Defined Functions
 
-LmRaC functionality is designed to be easily extensible. That is, the range of questions that LmRaC can answer is only constrained by the imagination (and industriousness) of the user. Though primarily intended to facilitate access to user data and results, user-defined functions can also be used to interface to any other resource whether static (e.g., database or resource API) or dynamic (e.g., instrumentation, sensing).
+LmRaC functionality is designed to be easily extensible. That is, the range of questions that LmRaC can answer is only constrained by the imagination (and industriousness) of the user. Though primarily intended to facilitate access to user data and results, user-defined functions can also be used to interface to any other resource whether static (e.g., database, resource API) or dynamic (e.g., instrumentation, sensing).
 
-A complete functional prototype of the REST API is provided in this GitHub repository in the [RESTserver](RESTserver/) folder.
+A functionally complete example of the REST API is provided in this GitHub repository in the [RESTserver](RESTserver/) folder. How to build and extend it is described below.
 
 ### Quick Start
 
-If you want to try the REST server without building it, a Docker image is provided. Keep in mind that this example has limited functionality, but it will give you a quick way to try functions.
+If you want to try the REST server without building it, a Docker image is available. Keep in mind that this example has limited functionality, but it will give you a quick way to try functions.
 
-**NOTE** this Docker image has been build from the GitHub repository example server described below.
+**NOTE** this Docker image has been build from the provided GitHub example ([RESTserver](RESTserver/)).
 
 Pull the latest tagged image from Docker Hub. Run LmRaC REST using Docker Engine. If Docker is not installed or you're using Docker Desktop, see the [Installation](#Installation) instructions below. This example server does not use any API keys.
 
-**IMPORTANT** you must mount the same local directory as was used for LmRaC otherwise the REST API will be looking in a directory different from LmRaC. Also, notice that the REST server is on a different port than LmRaC, 5001.
+**IMPORTANT** you must mount the same local directory as was used for LmRaC otherwise the REST API will be looking in a directory different from LmRaC. Also, notice that the REST server is on a different port than LmRaC: 5001.
 
 ```         
 docker pull dbcraig/lmracrest:latest
@@ -542,9 +542,11 @@ docker run -it -v $(pwd)/work:/app/user -p 5001:5001 dbcraig/lmracrest
 
 On startup the LmRaC REST server will print the IP:port it is running on. Make sure that this matches the LmRaC configuration otherwise LmRaC requests will not be received by the REST server.
 
-### Setting up the REST API Server
+You should now be able to ask questions about experimental data (e.g., "What is the expression of BRCA1 in my experiment?") as part of your questions to LmRaC.
 
-Clone the base REST API server from this GitHub repository, then build the Docker image for the functions server.
+### Building your own REST API Server
+
+You can use the provide example as a starting point for building your own REST API server. Clone the base REST API server from this GitHub repository, then build the Docker image for the functions server.
 
 ```         
 git clone https://github.com/dbcraig/LmRaC.git
@@ -564,22 +566,107 @@ LmRaC must know this IP:port in order to make function requests. You can edit th
 
 ### Adding Functions (Server - REST Server)
 
-xxx
-See DEGbasic.py
+The REST API example includes the following files and folders:
 
-Required parts:
+- **RESTserver.py** Initializes all functions and starts the server.
+- **DEGbasic.py** An example library of functions for returning results from differential gene expression experiments.
+- **Dockerfile** The script for building the Docker image.
+- **requirements.txt** A list of additional Python libraries to include in the Docker image.
+- **.dockerignore** Files and folders to ignore as part of the Docker build process.
+- **data/KEGGhsaPathwayGenes.tsv** DEGbasic function specific data to associate genes with pathways.
 
-- xx
-- xx
+Follow these steps to add functions to the REST API server.
+
+#### RESTserver.py
+
+1. Import your functions.
+
+```
+from DEGbasic import *
+```
+
+2. Instantiate your functions. This also performs any initialization by calling the *__init__* method.
+
+```
+DEGbasic = DEGbasic()
+```
+
+3. Add your function names to the API. This allows LmRaC to make a request by name.
+
+```
+functions.update( DEGbasic.functionsList() )
+```
+
+The functionsList() is a require method for all user-defined functions.
+
+#### DEGbasic.py (or your custom function file)
+
+4. Import needed libraries. Add these to the *requirements.txt* file if necessary.
+
+5. Define the __init__ method to perform any needed initialization for your functions.
+
+6. Define the functionsList(self) method to return a dictionary of named functions.
+
+```
+def functionsList(self):
+    """
+    Functions are called by name in the REST interface.
+    This maps the function names to the actual functions.
+    """
+    return {
+        'initializeDEGbasic' : self.initializeDEGbasic,
+        ...
+    }
+```
+
+7. Define your functions.
+
+8. Parameters.
+
+Parameters are passed as JSON. Use json.loads() to parse the parameters into a Python object. Be sure to handle optional parameters and any defaults they may have.
+
+```
+params = json.loads(params)
+top_k = params['topK']
+experiment = params['experiment']
+if ( 'filename' in params ):
+    filename = params['filename']
+else:
+    filename = 'pathwaySig.csv'
+```
+
+9. Return values and errors.
+
+All functions must return a string value. This may be free text, structured JSON, or some combination.
+
+**IMPORTANT** If your function needs to return an error, make the error descriptive and helpful to answering any question. To force LmRaC to abandon answering a question due to an error prefix the return text with **Function Error** followed by the function's name prefixed with **lmrac_**, as follows:
+
+```
+return "Function Error lmrac_<function-name>  ..."
+```
 
 ### Using Functions (Client - LmRaC)
 
-xxx
+To make functions available to LmRaC simply create a function prototype file in the *functions/* folder. The file must end with a *.fn* extension. When LmRaC starts it will read all *.fn* files, compile those that do not have a current *.json* file, and then make those available for loading (recall that functions must be *loaded* to be available to answer questions).
 
 #### Function prototypes (interface definition)
 
-xxx
-Since LmRaC is a language model, it relies on descriptions of functions and parameters ...
+LmRaC, the client, needs to know when and how to call functions. This is accomplished by providing function prototypes. The prototype includes the following:
+
+- function name
+- function description
+- function parameters
+
+LmRaC calls functions based on the function description. This is important: descriptions are not comments, they are integral to the function call. Parameters are passed using either information from the original question, or from previous function calls. All parameters are typed and must include a description. Descriptions are used by LmRaC to choose the correct value to assign to the parameter. Parameters may be optional. Allowed types are:
+
+- NUMBER
+- STRING
+- BOOLEAN
+- ARRAY
+
+All functions must return a string. This reply may be free text (natural language), structured text (JSON), or some combination. This text is returned to LmRaC as supplemental information to answer the original question. Think of it as additional information you may have added to your original question.
+
+A simple prototype file looks like this:
 
 ```
 #
@@ -590,20 +677,25 @@ DESCRIPTION	"This describes the entire group of functions and is used to create 
 FUNCTION initializeMyFunctions      "Functions dont have to have any parameters"
 
 # indentation is not necessary and is only used for readability; extra tabs and spaces are ignored
-# all lines must have a "comment" value since these are used by LmRaC to interpret and assign values
+# all lines must have a "description" value since these are used by LmRaC to interpret and assign values
 
 FUNCTION getTopExpressionResults    "This text describes the what the function does and is how LmRaC decides to use it"
     PARAMETER topK:NUMBER           "The NUMBER type may be integer or float depending on the function implementation"
     PARAMETER byFoldChange:BOOLEAN  "The BOOLEAN type is true or false"
     PARAMETER experiment:STRING     "STRING type are for characters"
-    PARAMETER filename:STRING*      "Adding a '*' makes the parameter optional"
+    PARAMETER description:STRING*   "Adding a '*' makes the parameter optional"
     PARAMETER geneArray:ARRAY       "ARRAY types can contain any type item except another array"
         ITEM gene:STRING            "array items begin with the ITEM keyword"
 ```
 
-#### Function compilation
+Save all function prototype files in the *functions/* folder. The file name will be the name used when loading.
+
+#### Function prototype compilation
 
 xxx
+... when LmRaC initializes it will attempt to compile all *.fn* files in the mounted *functions/* folder, unless the *.json* file (compiled version) is newer than the source (*.fn*). Upon successful compilation (i.e., no errors), the *.json* file will be available to LmRaC for loading.
+
+
 
 #### Function loading
 
@@ -611,6 +703,10 @@ xxx Load the function ... it will be used based on the description
 
 xxx Errors when loading... LmRaC tests that the JSON is well formed
 ... show (!) message ?
+
+When loading functions LmRaC does a final quick error check. If the *<function>.json* has errors these will display as an error message when loading from the LmRaC dialog or as a red exclamation icon in the Functions Window. Hovering over the error icon will show the error.
+
+![](img/LmRaC_Functions_error.png)
 
 Why unload a function
 
@@ -638,6 +734,8 @@ Likewise, functions are designed to manipulate your data (e.g., read, search, co
 ## Troubleshooting
 
 > **LmRaC isn't calling my function:** The most common cause for this is that the function has not been loaded. Although function files are read and compiled at initialization, they must also be *loaded* in order to be available for questions. This allows LmRaC to focus only on functions relevant to the task at hand. Note that what functions are loaded is saved to the configuration file, so after restarting LmRaC your functions are automatically re-loaded.
+
+> **LmRaC won't stop calling my function:** If your function does not return what it's description promises it should, LmRaC will try again. And again. And again. Make sure to perform the described function. If there is an error, return **Function Error** followed by the function's name prefixed with **lmrac_**. This will signal to LmRaC that the function has failed.
 
 > **Memory:** Because LmRaC uses multiprocessing extensively, complex questions can require significant memory resources while documents are being processed. We recommend a minimum of 1GB for the Docker container, though 2GB may be necessary for large multi-part questions. The error **A process in the process pool was terminated abruptly while the future was running or pending** is usually an indication that LmRaC ran out of memory.
 
