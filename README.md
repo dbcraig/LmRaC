@@ -585,7 +585,7 @@ Follow these steps to add functions to the REST API server.
 from DEGbasic import *
 ```
 
-2. Instantiate your functions. This also performs any initialization by calling the *__init__* method.
+2. Instantiate your functions. This also performs any initialization by calling the *\_\_init\_\_* method.
 
 ```
 DEGbasic = DEGbasic()
@@ -597,13 +597,13 @@ DEGbasic = DEGbasic()
 functions.update( DEGbasic.functionsList() )
 ```
 
-The functionsList() is a require method for all user-defined functions.
+The functionsList() is a require method for all user-defined function classes.
 
-#### DEGbasic.py (or your custom function file)
+#### DEGbasic.py (or your custom functions file)
 
 4. Import needed libraries. Add these to the *requirements.txt* file if necessary.
 
-5. Define the __init__ method to perform any needed initialization for your functions.
+5. Define the \_\_init\_\_ method to perform any needed initialization for your functions.
 
 6. Define the functionsList(self) method to return a dictionary of named functions.
 
@@ -621,9 +621,9 @@ def functionsList(self):
 
 7. Define your functions.
 
-8. Parameters.
+**Naming:** Do not include the prefix *lmrac_* on function names. This is added internally during compilation.
 
-Parameters are passed as JSON. Use json.loads() to parse the parameters into a Python object. Be sure to handle optional parameters and any defaults they may have.
+**Parameters:** Parameters are passed as JSON. Use json.loads() to parse the parameters into a Python object. Be sure to handle optional parameters and any defaults they may have.
 
 ```
 params = json.loads(params)
@@ -635,11 +635,9 @@ else:
     filename = 'pathwaySig.csv'
 ```
 
-9. Return values and errors.
+**Return values and errors:** All functions must return a string value. This may be free text, structured JSON, or some combination.
 
-All functions must return a string value. This may be free text, structured JSON, or some combination.
-
-**IMPORTANT** If your function needs to return an error, make the error descriptive and helpful to answering any question. To force LmRaC to abandon answering a question due to an error prefix the return text with **Function Error** followed by the function's name prefixed with **lmrac_**, as follows:
+**IMPORTANT** If your function needs to return an error, make the error descriptive and helpful to answering any question. To force LmRaC to abandon answering a question due to an error, prefix the return text with **Function Error** followed by the function's name prefixed with **lmrac_**, as follows:
 
 ```
 return "Function Error lmrac_<function-name>  ..."
@@ -647,7 +645,7 @@ return "Function Error lmrac_<function-name>  ..."
 
 ### Using Functions (Client - LmRaC)
 
-To make functions available to LmRaC simply create a function prototype file in the *functions/* folder. The file must end with a *.fn* extension. When LmRaC starts it will read all *.fn* files, compile those that do not have a current *.json* file, and then make those available for loading (recall that functions must be *loaded* to be available to answer questions).
+To make functions available to LmRaC simply create a function prototype file in the *functions/* folder. The file must end with a *.fn* extension. When LmRaC starts it will read all *.fn* files, compile those that do not have a current *.json* file, and then make those available for loading (recall that functions must be *loaded* on LmRaC has started to be available to answer questions).
 
 #### Function prototypes (interface definition)
 
@@ -664,7 +662,7 @@ LmRaC calls functions based on the function description. This is important: desc
 - BOOLEAN
 - ARRAY
 
-All functions must return a string. This reply may be free text (natural language), structured text (JSON), or some combination. This text is returned to LmRaC as supplemental information to answer the original question. Think of it as additional information you may have added to your original question.
+All functions must return a string. This reply may be free text (natural language), structured text (JSON), or some combination. This text is returned to LmRaC as supplemental information to answer the original question. Think of it as additional information you could have added to your original question.
 
 A simple prototype file looks like this:
 
@@ -672,14 +670,14 @@ A simple prototype file looks like this:
 #
 #	Line comments begin with a '#' mark
 #
-DESCRIPTION	"This describes the entire group of functions and is used to create a README file"
+DESCRIPTION	"This describes the entire group of functions and is used to create a README file in the functions/ folder"
 
 FUNCTION initializeMyFunctions      "Functions dont have to have any parameters"
 
 # indentation is not necessary and is only used for readability; extra tabs and spaces are ignored
 # all lines must have a "description" value since these are used by LmRaC to interpret and assign values
 
-FUNCTION getTopExpressionResults    "This text describes the what the function does and is how LmRaC decides to use it"
+FUNCTION getTopExpressionResults    "This text describes what the function does and is how LmRaC decides to use it"
     PARAMETER topK:NUMBER           "The NUMBER type may be integer or float depending on the function implementation"
     PARAMETER byFoldChange:BOOLEAN  "The BOOLEAN type is true or false"
     PARAMETER experiment:STRING     "STRING type are for characters"
@@ -692,28 +690,27 @@ Save all function prototype files in the *functions/* folder. The file name will
 
 #### Function prototype compilation
 
-xxx
-... when LmRaC initializes it will attempt to compile all *.fn* files in the mounted *functions/* folder, unless the *.json* file (compiled version) is newer than the source (*.fn*). Upon successful compilation (i.e., no errors), the *.json* file will be available to LmRaC for loading.
+When LmRaC initializes it will attempt to compile all *.fn* files in the mounted *functions/* folder, unless the *.json* file (compiled version) is newer than the source (*.fn*). Upon successful compilation (i.e., no errors), the *.json* file will be available to LmRaC for loading.
 
-
+Any error in compilation will be report during LmRaC intialization. This is not fatal, but makes the functions unavailable for loading. Fix any errors and restart LmRaC. Errors are also detected when functions are loaded.
 
 #### Function loading
 
-xxx Load the function ... it will be used based on the description
+Once LmRaC has started you may *load* functions to make them available to answer questions. Simply ask LmRaC to load the functions or use the [Functions Window](#Functions-Window).
 
-xxx Errors when loading... LmRaC tests that the JSON is well formed
-... show (!) message ?
+Remember that LmRac chooses functions based on their description. For example, if you ask a question about gene expression in your experiment, LmRaC will look for any functions that describe themselves as "getting gene expression." Describe your functions as accurately and succinctly as possible.
 
-When loading functions LmRaC does a final quick error check. If the *<function>.json* has errors these will display as an error message when loading from the LmRaC dialog or as a red exclamation icon in the Functions Window. Hovering over the error icon will show the error.
+When loading functions LmRaC does a final quick error check. If the *<function>.json* has errors these will display as an error message when loading from the LmRaC dialog or as a red exclamation icon in the [Functions Window](#Functions-Window). Hovering over the error icon will show the error.
 
 ![](img/LmRaC_Functions_error.png)
 
-Why unload a function
+#### Function unloading
+
+Only load functions when they are needed. Since functions are passed to GPT4 whenever a question is asked, they are included as part of the input token count. This means that aside from being unnecessary (and possibly confusing) when asking a question, they also incur unnecessary API costs.
 
 ### General Functions
 
-xxx
-Can they be used to extend the functionality of LmRaC ??
+Though the functions described here read and manipulate data, LmRaC functions can also be used to make other information available to LmRaC. Try it! Let us know what useful functions you've defined and how you've extended LmRaC's functionality.
 
 ------------------------------------------------------------------------
 
