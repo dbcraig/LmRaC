@@ -530,9 +530,9 @@ If you want to try the REST server without building it, a Docker image is availa
 
 **NOTE** this Docker image has been build from the provided GitHub example ([RESTserver](RESTserver/)).
 
-Pull the latest tagged image from Docker Hub. Run LmRaC REST using Docker Engine. If Docker is not installed or you're using Docker Desktop, see the [Installation](#Installation) instructions below. This example server does not use any API keys.
+Pull the latest tagged image from Docker Hub. Run LmRaC REST using Docker Engine. If Docker is not installed or you're using Docker Desktop, see the [Installation](#Installation) instructions above. This example server does not use any API keys.
 
-**IMPORTANT** you must mount the same local directory as was used for LmRaC otherwise the REST API will be looking in a directory different from LmRaC. Also, notice that the REST server is on a different port than LmRaC: 5001.
+**IMPORTANT** you must mount the same local directory as was used for LmRaC otherwise the REST API will be looking in a directory different from LmRaC and will not find the data files it is returning results from. Also, notice that the REST server is on a different port than LmRaC: 5001.
 
 ```         
 docker pull dbcraig/lmracrest:latest
@@ -540,7 +540,7 @@ cd <your-lmrac-root>
 docker run -it -v $(pwd)/work:/app/user -p 5001:5001 dbcraig/lmracrest
 ```
 
-On startup the LmRaC REST server will print the IP:port it is running on. Make sure that this matches the LmRaC configuration otherwise LmRaC requests will not be received by the REST server.
+On startup the LmRaC REST server will print the IP:port it is running on. Make sure that this matches the LmRaC configuration otherwise LmRaC requests will not be received by the REST server. To aid in debugging, this example server echos requests it has received. If you do not see a request, then they are likely being sent to the wrong IP:port address.
 
 You should now be able to ask questions about experimental data (e.g., "What is the expression of BRCA1 in my experiment?") as part of your questions to LmRaC.
 
@@ -562,7 +562,7 @@ docker run -it -v $(pwd)/work:/app/user -p 5001:5001 lmracrest
 
 When the server starts up it will show the IP:port on which it is running.
 
-LmRaC must know this IP:port in order to make function requests. You can edit the LmRaC.config file (see [Configuration](#configuration)) so that the *functionsREST* key value is set to IP:port (e.g., "172.17.0.2:5001") or you can set the IP:port dynamically be asking LmRaC to set the value (e.g., "Please set the functions REST API IP and port to 172.17.0.2:5001")
+LmRaC must know this IP:port in order to make API requests. You can edit the LmRaC.config file (see [Configuration](#configuration)) so that the *functionsREST* key value is set to IP:port (e.g., "172.17.0.2:5001") or you can set the IP:port dynamically be asking LmRaC to set the value (e.g., "Please set the functions REST API IP and port to 172.17.0.2:5001")
 
 ### Adding Functions (Server - REST Server)
 
@@ -603,9 +603,9 @@ The functionsList() is a require method for all user-defined function classes.
 
 4. Import needed libraries. Add these to the *requirements.txt* file if necessary.
 
-5. Define the \_\_init\_\_ method to perform any needed initialization for your functions.
+5. Define the *\_\_init\_\_* method to perform any needed initialization for your functions.
 
-6. Define the functionsList(self) method to return a dictionary of named functions.
+6. Define the *functionsList(self)* method to return a dictionary of named functions.
 
 ```
 def functionsList(self):
@@ -621,9 +621,9 @@ def functionsList(self):
 
 7. Define your functions.
 
-**Naming:** Do not include the prefix *lmrac_* on function names. This is added internally during compilation.
+  - **Naming:** Function names should be the same as in the LmRaC functions prototype file (see [function prototypes](#Function-prototypes) below). Function names *are* case sensitive. Note: do not include the prefix *lmrac_* on function names. This is added internally during compilation.
 
-**Parameters:** Parameters are passed as JSON. Use json.loads() to parse the parameters into a Python object. Be sure to handle optional parameters and any defaults they may have.
+  - **Parameters:** Parameters are passed in as JSON. Use *json.loads()* to parse the parameters into a Python object. Be sure to handle optional parameters and any defaults they may have.
 
 ```
 params = json.loads(params)
@@ -635,7 +635,7 @@ else:
     filename = 'pathwaySig.csv'
 ```
 
-**Return values and errors:** All functions must return a string value. This may be free text, structured JSON, or some combination.
+  - **Return values and errors:** All functions must return a string value. This may be free text, structured JSON, or some combination.
 
 **IMPORTANT** If your function needs to return an error, make the error descriptive and helpful to answering any question. To force LmRaC to abandon answering a question due to an error, prefix the return text with **Function Error** followed by the function's name prefixed with **lmrac_**, as follows:
 
@@ -645,9 +645,11 @@ return "Function Error lmrac_<function-name>  ..."
 
 ### Using Functions (Client - LmRaC)
 
-To make functions available to LmRaC simply create a function prototype file in the *functions/* folder. The file must end with a *.fn* extension. When LmRaC starts it will read all *.fn* files, compile those that do not have a current *.json* file, and then make those available for loading (recall that functions must be *loaded* on LmRaC has started to be available to answer questions).
+To make functions available to LmRaC simply create a function prototype file in the *functions/* folder. The file must end with a *.fn* extension. When LmRaC starts it will read all *.fn* files, compile those that do not have a current *.json* file, and then make those available for loading (recall that functions must be *loaded* once LmRaC has started to be available to answer questions).
 
-#### Function prototypes (interface definition)
+**IMPORTANT** Prototype file names *are* case sensitive.
+
+#### Function prototypes
 
 LmRaC, the client, needs to know when and how to call functions. This is accomplished by providing function prototypes. The prototype includes the following:
 
@@ -655,14 +657,14 @@ LmRaC, the client, needs to know when and how to call functions. This is accompl
 - function description
 - function parameters
 
-LmRaC calls functions based on the function description. This is important: descriptions are not comments, they are integral to the function call. Parameters are passed using either information from the original question, or from previous function calls. All parameters are typed and must include a description. Descriptions are used by LmRaC to choose the correct value to assign to the parameter. Parameters may be optional. Allowed types are:
+LmRaC calls functions based on the function description. This is important: descriptions are not comments, they are integral to the choosing functions to call. Parameters are passed using information eitherfrom the original question, or from previous function calls. All parameters are typed and must include a description. Descriptions are used by LmRaC to choose the correct value to assign to the parameter. Parameters may be optional. Allowed types are:
 
 - NUMBER
 - STRING
 - BOOLEAN
 - ARRAY
 
-All functions must return a string. This reply may be free text (natural language), structured text (JSON), or some combination. This text is returned to LmRaC as supplemental information to answer the original question. Think of it as additional information you could have added to your original question.
+All functions must return a string. This reply may be free text (natural language), structured text (JSON), or some combination. This text is returned to LmRaC as supplemental information to answer the original question. Think of it as additional information you *could* have added to your original question.
 
 A simple prototype file looks like this:
 
@@ -686,17 +688,19 @@ FUNCTION getTopExpressionResults    "This text describes what the function does 
         ITEM gene:STRING            "array items begin with the ITEM keyword"
 ```
 
-Save all function prototype files in the *functions/* folder. The file name will be the name used when loading.
+Save all function prototype files in the *functions/* folder. The file name will be the name used when loading. Names are case sensitive.
 
 #### Function prototype compilation
 
 When LmRaC initializes it will attempt to compile all *.fn* files in the mounted *functions/* folder, unless the *.json* file (compiled version) is newer than the source (*.fn*). Upon successful compilation (i.e., no errors), the *.json* file will be available to LmRaC for loading.
 
-Any error in compilation will be report during LmRaC intialization. This is not fatal, but makes the functions unavailable for loading. Fix any errors and restart LmRaC. Errors are also detected when functions are loaded.
+Any error in compilation will be reported during LmRaC intialization. This is not fatal, but makes the functions unavailable for loading. Fix any errors and restart LmRaC. Errors are also detected when functions are loaded.
 
 #### Function loading
 
-Once LmRaC has started you may *load* functions to make them available to answer questions. Simply ask LmRaC to load the functions or use the [Functions Window](#Functions-Window).
+Once LmRaC has started you may *load* functions to make them available to answer questions. Simply ask LmRaC to load the functions or use the [Functions Window](#Functions-Window). The name of the functions library is the name of the prototypes file. 
+
+**IMPORTANT** Prototype file names *are* case sensitive.
 
 Remember that LmRac chooses functions based on their description. For example, if you ask a question about gene expression in your experiment, LmRaC will look for any functions that describe themselves as "getting gene expression." Describe your functions as accurately and succinctly as possible.
 
@@ -710,7 +714,7 @@ Only load functions when they are needed. Since functions are passed to GPT4 whe
 
 ### General Functions
 
-Though the functions described here read and manipulate data, LmRaC functions can also be used to make other information available to LmRaC. Try it! Let us know what useful functions you've defined and how you've extended LmRaC's functionality.
+Though the functions described here read and manipulate data, LmRaC functions can also be used to make other information available to LmRaC (e.g., retrieving information from APIs or search). Try it! Let us know what useful functions you've defined and how you've extended LmRaC's functionality.
 
 ------------------------------------------------------------------------
 
@@ -720,7 +724,7 @@ Indexes are purposely independent of Experiments.
 
 Functions are purposely independent of Experiments.
 
-With flexibility comes responsibility. Maybe the most confusing part of LmRaC is remembering that indexes and experiments independent. Think of indexes as a collection of information about a domain of knowledge *that you define.* Within that collection is additional information about particular experiments (e.g., answers you've saved, documents you've uploaded, interpretations of results). So, if you want to ask questions (i.e., search) about these experiments, you need to use this index.
+With flexibility comes responsibility. Maybe the most confusing part of LmRaC is remembering that indexes and experiments are independent. Think of indexes as a collection of information about a domain of knowledge *that you define.* Within that collection is additional information about particular experiments (e.g., answers you've saved, documents you've uploaded, interpretations of results). So, if you want to ask questions about (i.e., search) these experiments, you need to use the correct index.
 
 However, information about an experiment can be saved to *more than one index*! You may have an index created specifically for one disease (e.g., breast cancer). You may have another index created for a particular experimental protocol (e.g., differential gene expression). Information about your experiment investigating gene expression in breast cancer can be saved to both indexes! *Or*, you could just create one large index for both breast cancer and differential gene expression. You have the flexibility to design the knowledge base best suited for the questions you ask.
 
@@ -730,13 +734,13 @@ Likewise, functions are designed to manipulate your data (e.g., read, search, co
 
 ## Troubleshooting
 
-> **LmRaC isn't calling my function:** The most common cause for this is that the function has not been loaded. Although function files are read and compiled at initialization, they must also be *loaded* in order to be available for questions. This allows LmRaC to focus only on functions relevant to the task at hand. Note that what functions are loaded is saved to the configuration file, so after restarting LmRaC your functions are automatically re-loaded.
+> **LmRaC isn't calling my function:** The most common cause for this is that the function has not been loaded. Although function files are read and compiled at initialization, they must also be *loaded* in order to be available for questions. This allows LmRaC to focus only on functions relevant to the task at hand. Note that which functions are loaded is saved to the configuration file, so after restarting LmRaC your functions are automatically re-loaded.
 
-> **LmRaC won't stop calling my function:** If your function does not return what it's description promises it should, LmRaC will try again. And again. And again. Make sure to perform the described function. If there is an error, return **Function Error** followed by the function's name prefixed with **lmrac_**. This will signal to LmRaC that the function has failed.
+> **LmRaC won't stop calling my function:** If your function does not return what it's description promises it should, LmRaC will try again. And again. And again. Make sure to perform the described function. If there is an error, return **Function Error** followed by the function's name prefixed with **lmrac_**. This will signal to LmRaC that the function has failed and not to try again.
 
 > **Memory:** Because LmRaC uses multiprocessing extensively, complex questions can require significant memory resources while documents are being processed. We recommend a minimum of 1GB for the Docker container, though 2GB may be necessary for large multi-part questions. The error **A process in the process pool was terminated abruptly while the future was running or pending** is usually an indication that LmRaC ran out of memory.
 
-> **Rate Limits:** All servers have rate limits (i.e., maximum number of requests per second). In the case of PubMed this is fix. For OpenAI this increases over time for users. In all cases LmRaC will retry a request in the event of a rate limit error. Retries employ an exponential backoff strategy that, in most cases, is sufficient for the request to ultimately succeed. As a consequence, users may see slower response times when using LmRaC with a new OpenAI account.
+> **Rate Limits:** All servers have rate limits (i.e., maximum number of requests per second). In the case of PubMed this is fixed. For OpenAI this increases over time for users. In all cases LmRaC will retry a request in the event of a rate limit error. Retries employ an exponential backoff strategy that, in most cases, is sufficient for the request to ultimately succeed. As a consequence, users may see slower response times when using LmRaC with a new OpenAI account.
 
 > **Low Assessment Scores:** Note that it is not unusual for GPT4 to assess final answers as poor. Most often this is due to two factors: (1) GPT4 flags citations as "fake" because they occur after the training cutoff date of GPT4; or, (2) GPT4 objects to the complexity of the answer as exceeding the scope of the original question, or inappropriate for a lay audience. On the other hand, these assessment often offer insightful critiques that may prompt further questions.
 
