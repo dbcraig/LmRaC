@@ -105,7 +105,7 @@ When using Docker Desktop, keys are part of the container's Run settings (see [C
 
     The first time you run LmRaC it will use a default configuration. See [Configuration](#Configuration) below for how to customize the configuration. When you quit LmRaC your current configuration is saved to *config/LmRaC.config* in the the mounted directory.
 
-    **TIP** Use a new window when first starting LmRaC. DO NOT use the browser reload button to restart LmRaC. This can cause synchronization problems between the browser (client) and the Docker container (server). If user questions and answers seem to be out of sync, simply restart the Docker container, and reopen LmRaC in a new window.
+    **TIP:** Use a new window when first starting LmRaC. DO NOT use the browser reload button to restart LmRaC. This can cause synchronization problems between the browser (client) and the Docker container (server). If user questions and answers seem to be out of sync, simply restart the Docker container, and reopen LmRaC in a new window.
 
 6. **Create an Index:** Since building a knowledge base can take time, start with the loadable example index. 
 
@@ -127,8 +127,8 @@ When using Docker Desktop, keys are part of the container's Run settings (see [C
 
    Each index has two parts: 
 
-       - **RAGdom:** the general domain knowledge index for primary material (i.e., PubMed articles)
-       - **RAGexp:** the experiment specific index for secondary material (e.g., saved answers, protocols, background/context knowledge)
+   - **RAGdom:** the general domain knowledge index for primary material (i.e., PubMed articles)
+   - **RAGexp:** the experiment specific index for secondary material (e.g., saved answers, protocols, background/context knowledge)
 
    b. *Populate the index:* Open the [Indexes Window](#Indexes-Window). If your index is not already selected, click on the radio button next to it.
 
@@ -138,7 +138,7 @@ When using Docker Desktop, keys are part of the container's Run settings (see [C
 
     *exampleIDX.idx* indexes nearly 6000 paragraphs from about 130 journal articles on the disease breast cancer ([D001943](https://meshb.nlm.nih.gov/record/ui?ui=D001943)), its associated pathway ([hsa05224](https://www.genome.jp/pathway/hsa05224)), and 10 of the most important genes ([TP53](https://www.genecards.org/cgi-bin/carddisp.pl?gene=TP53), EGFR, BRCA1, BRCA2, CASP8, CHEK2, ERBB4, FOXP1, CDKN2A, AKT1).
 
-    **TIP** Build indexes incrementally in smaller chunks. DON'T ask for 100's of references for every pathway, gene or disease. Most answers can be had using only 2 to 5 references. This is especially true of pathways which often have a dozen or more primary references plus secondary citations. Initially, ask for only 2 or 3 secondary citations for each primary. This can end up being 100+ high-quality documents for one pathway, which is more than enough for many questions.
+    **TIP:** Build indexes incrementally in smaller chunks. DON'T ask for 100's of references for every pathway, gene or disease. Most answers can be had using only 2 to 5 references. This is especially true of pathways which often have a dozen or more primary references plus secondary citations. Initially, ask for only 2 or 3 secondary citations for each primary. This can end up being 100+ high-quality documents for one pathway, which is more than enough for many questions.
 
 7. **Ask a Question:** Ask a question. LmRaC will analyze the question for any mention of genes, diseases or pathways using its vocabularies (see [Configuration](#Configuration)). It will summarize what it finds as the Search Context. If the index already contains information about any of these items, you will be given the option of updating the index (i.e., searching for more documents). If the index does not include information about one or more item in the question, it will initiate a search of PubMed and populate the index.
     
@@ -177,7 +177,7 @@ When using Docker Desktop, keys are part of the container's Run settings (see [C
     Determining sub-questions to answer...
     ```
 
-    **TIP** Ask for simple answers first. A complexity of "1" will likely give you a good summary answer from which you can ask more detailed questions. Asking for a "7" will yield a longer answer, but likely with more redundant information.
+    **TIP:** Ask for simple answers first. A complexity of "1" will likely give you a good summary answer from which you can ask more detailed questions. Asking for a "7" will yield a longer answer, but likely with more redundant information.
 
 8. **View the Answer:** Answers are displayed during processing and saved in the *sessions/finalAnswers/* directory along with information about the original query, generated sub-queries, references for the answer and a GPT4 assessment of the final answer.
 
