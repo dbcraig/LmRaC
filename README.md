@@ -590,7 +590,7 @@ If you want to try the REST server without building it, a Docker image is availa
 
 Pull the latest tagged image from Docker Hub. Run LmRaC REST using Docker Engine. If Docker is not installed or you're using Docker Desktop, see the [Installation](#Installation) instructions above. This example server does not use any API keys.
 
-> **IMPORTANT** you must mount the same local directory as was used for LmRaC otherwise the REST API will be looking in a directory different from LmRaC and will not find the data files it is returning results from. Also, notice that the REST server is on a different port than LmRaC: 5001.
+> **IMPORTANT** you must mount the same local directory as was used for LmRaC otherwise the REST API will be looking in a directory different from LmRaC and will not find the data files it is returning results from. Also, notice that the REST server is on a different port than LmRaC (typically 5001).
 
 ```         
 docker pull dbcraig/lmracrest:latest
@@ -600,7 +600,9 @@ docker run -it -v $(pwd)/work:/app/user -p 5001:5001 dbcraig/lmracrest
 
 On startup the LmRaC REST server will print the IP:port it is running on. Make sure that this matches the LmRaC configuration otherwise LmRaC requests will not be received by the REST server. To aid in debugging, this example server echos requests it has received. If you do not see a request, then they are likely being sent to the wrong IP:port address.
 
-You should now be able to ask questions about experimental data (e.g., "What is the expression of BRCA1 in my experiment?") as part of your questions to LmRaC.
+#### The exampleExp Experiment
+
+Included with LmRaC configuration is an example experiment: *exampleExp*. This experiment includes sample data files that are compatible with the *DEGbasic* function library (see below). Set *exampleExp* as the current experiment. Load the *DEGbasic* functions. You should now be able to ask questions about experimental data (e.g., "What is the expression of BRCA1 in my experiment?") as part of your questions to LmRaC.
 
 ### Building your own REST API Server
 
@@ -798,7 +800,7 @@ Likewise, functions are designed to manipulate your data (e.g., read, search, co
 
 > **Memory:** Because LmRaC uses multiprocessing extensively, complex questions can require significant memory resources while documents are being processed. We recommend a minimum of 1GB for the Docker container, though 2GB may be necessary for large multi-part questions. The error **A process in the process pool was terminated abruptly while the future was running or pending** is usually an indication that LmRaC ran out of memory.
 
-> **Rate Limits:** All servers have rate limits (i.e., maximum number of requests per second). In the case of PubMed this is fixed. For OpenAI this increases over time for users. In all cases LmRaC will retry a request in the event of a rate limit error. Retries employ an exponential backoff strategy that, in most cases, is sufficient for the request to ultimately succeed. As a consequence, users may see slower response times when using LmRaC with a new OpenAI account.
+> **Rate Limits:** All servers have rate limits (i.e., maximum number of requests per second and/or per day). In the case of PubMed this is fixed. For OpenAI this increases over time for users. In all cases LmRaC will retry a request in the event of a rate limit error. Retries employ an exponential backoff strategy that, in most cases, is sufficient for the request to ultimately succeed. As a consequence, users may see slower response times when using LmRaC with a new OpenAI account. Keep this in mind when first building an index since computing embeddings is also a rate limited activity. 
 
 > **Low Assessment Scores:** Note that it is not unusual for GPT4 to assess final answers as poor. Most often this is due to two factors: (1) GPT4 flags citations as "fake" because they occur after the training cutoff date of GPT4; or, (2) GPT4 objects to the complexity of the answer as exceeding the scope of the original question, or inappropriate for a lay audience. On the other hand, these assessment often offer insightful critiques that may prompt further questions.
 
