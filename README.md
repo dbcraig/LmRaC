@@ -12,11 +12,11 @@ LmRaC has been designed to recognize biological pathways, diseases and gene name
 
 ---
 
-**DISCLAIMER**
-LmRaC is a research project undergoing continuous improvement. As such:
-- We welcome suggests for new features as well as bug reports.
-- Although RAG greatly reduces the chances of hallucinations, fabricated citations and false inferences, these are all still possible. We strongly suggest following citation links to confirm and better understand any underlying inferences to answers.
-- Think of LmRaC as an eager and knowledgeable student who can help you with your research, but still needs some supervision!
+> **DISCLAIMER**
+> LmRaC is a research project undergoing continuous improvement. As such:
+> - We welcome suggests for new features as well as bug reports.
+> - Although RAG greatly reduces the chances of hallucinations, fabricated citations and false inferences, these are all still possible. We strongly suggest following citation links to confirm and better understand any underlying inferences to answers.
+> - Think of LmRaC as an eager and knowledgeable student who can help you with your research, but still needs some supervision!
 
 ------------------------------------------------------------------------
 
