@@ -606,7 +606,7 @@ Included with LmRaC configuration is an example experiment: *exampleExp*. This e
 
 ### Building your own REST API Server
 
-You can use the provide example as a starting point for building your own REST API server. Clone the base REST API server from this GitHub repository, then build the Docker image for the functions server.
+You can use the provided example as a starting point for building your own REST API server. Clone the base REST API server from this GitHub repository, then build the Docker image for the functions server.
 
 ```         
 git clone https://github.com/dbcraig/LmRaC.git
