@@ -130,13 +130,11 @@ When using Docker Desktop, keys are part of the container's Run settings (see [C
    - **RAGdom:** the general domain knowledge index for primary material (i.e., PubMed articles)
    - **RAGexp:** the experiment specific index for secondary material (e.g., saved answers, protocols, background/context knowledge)
 
-   b. *Populate the index:* Open the [Indexes Window](#Indexes-Window). If your index is not already selected, click on the radio button next to it.
-
+   b. *Populate the index:* Open the [Indexes Window](#Indexes-Window). If your index is not already selected, click on the radio button next to it. Click on the upload icon next to your index. Select *exampleIDX* and then click upload. This will load embeddings from a pre-built index into your new index. The upload should take less than 5 minutes. Press the refresh button periodically to check for completion.
+    
     ![](img/LmRaC_Indexes_Upload.png)
 
-    Click on the upload icon next to your index. Select *exampleIDX* and then click upload. This will embeddings from a pre-built index into your index. The upload should take less than 5 minutes. Press the refresh button periodically to check for completion.
-
-    *exampleIDX.idx* indexes nearly 6000 paragraphs from about 130 journal articles on the disease breast cancer ([D001943](https://meshb.nlm.nih.gov/record/ui?ui=D001943)), its associated pathway ([hsa05224](https://www.genome.jp/pathway/hsa05224)), and 10 of the most important genes ([TP53](https://www.genecards.org/cgi-bin/carddisp.pl?gene=TP53), EGFR, BRCA1, BRCA2, CASP8, CHEK2, ERBB4, FOXP1, CDKN2A, AKT1).
+    Note that *exampleIDX.idx* indexes nearly 6000 paragraphs from over 100 journal articles on the disease breast cancer ([D001943](https://meshb.nlm.nih.gov/record/ui?ui=D001943)), its associated pathway ([hsa05224](https://www.genome.jp/pathway/hsa05224)), and 10 of the most important genes in breast cancer: [TP53](https://www.genecards.org/cgi-bin/carddisp.pl?gene=TP53), [EGFR](https://www.genecards.org/cgi-bin/carddisp.pl?gene=EGFR), [BRCA1](https://www.genecards.org/cgi-bin/carddisp.pl?gene=BRCA1), [BRCA2](https://www.genecards.org/cgi-bin/carddisp.pl?gene=BRCA2), [CASP8](https://www.genecards.org/cgi-bin/carddisp.pl?gene=CASP8), [CHEK2](https://www.genecards.org/cgi-bin/carddisp.pl?gene=CHEK2), [ERBB4](https://www.genecards.org/cgi-bin/carddisp.pl?gene=ERBB4), [FOXP1](https://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXP1), [CDKN2A](https://www.genecards.org/cgi-bin/carddisp.pl?gene=CDKN2A) and [AKT1](https://www.genecards.org/cgi-bin/carddisp.pl?gene=AKT1).
 
     **TIP:** Build indexes incrementally in smaller chunks. DON'T ask for 100's of references for every pathway, gene or disease. Most answers can be had using only 2 to 5 references. This is especially true of pathways which often have a dozen or more primary references plus secondary citations. Initially, ask for only 2 or 3 secondary citations for each primary. This can end up being 100+ high-quality documents for one pathway, which is more than enough for many questions.
 
@@ -185,7 +183,7 @@ When using Docker Desktop, keys are part of the container's Run settings (see [C
 
 9. **Expand your Knowledge:** You can add to your index by asking a question about another gene, pathway or disease. Try it!
 
-10. **Quitting LmRaC** Exit LmRaC by typing "bye" or "exit" or "adios" in whatever language you prefer. You will be given the option to save your current configuration. The saved configuration includes your current index, experiment and any loaded functions. Once you quit the Docker container will exit.
+10. **Quitting LmRaC** Exit LmRaC by typing "bye" or "exit" or "adios" in whatever language you prefer. You will be given the option to save your current configuration. The saved configuration includes your current index, experiment and any loaded functions. Once you quit, the Docker container will exit.
 
 ### Next steps
 
