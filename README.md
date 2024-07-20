@@ -10,6 +10,8 @@ LmRaC uses a multi-tier retrieval-augmented generation (RAG) design to index: do
 
 LmRaC has been designed to recognize biological pathways, diseases and gene names and find associated journal articles from [PubMed](https://pubmed.ncbi.nlm.nih.gov/) to answer your questions.
 
+---
+
 **DISCLAIMER**
 LmRaC is a research project undergoing continuous improvement. As such:
 - We welcome suggests for new features as well as bug reports.
