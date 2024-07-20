@@ -101,7 +101,7 @@ When using Docker Desktop, keys are part of the container's Run settings (see [C
   
     The LmRaC homepage will open and LmRaC will initialize. Any problems (e.g., missing keys) will be reported.
 
-![](img/LmRaC_init.png)
+    ![](img/LmRaC_init.png)
 
     The first time you run LmRaC it will use a default configuration. See [Configuration](#Configuration) below for how to customize the configuration. When you quit LmRaC your current configuration is saved to *config/LmRaC.config* in the the mounted directory.
 
@@ -111,28 +111,28 @@ When using Docker Desktop, keys are part of the container's Run settings (see [C
 
    a. *Create an Index:* Type *index = my-index* in the user input area. LmRaC will respond with *Index 'my-index' not found. Create new index? [y/N]*  Change the default *no* to *yes* and press enter. LmRaC will ask for an *Index description:* Enter a short description and press enter. After a few seconds LmRaC will respond with the size of the new index.
 
-```
-[user]  index = my-index
-[LmRaC] Calling  functionName: cmd_SET_CURRENT_INDEX
-[LmRaC] Index 'my-index' not found. Create new index? [y/N] 
-[user]  yes
-[LmRaC] Index description:
-[user]  My new index to try LmRaC.
-[LmRaC] Creating new index 'my-index'...
-[LmRaC] The current index has been set to 'my-index'.
-Index sizes are:
-RAGdom : my-index (0)
-RAGexp : my-index-exp (0)
-```
+    ```
+    [user]  index = my-index
+    [LmRaC] Calling  functionName: cmd_SET_CURRENT_INDEX
+    [LmRaC] Index 'my-index' not found. Create new index? [y/N] 
+    [user]  yes
+    [LmRaC] Index description:
+    [user]  My new index to try LmRaC.
+    [LmRaC] Creating new index 'my-index'...
+    [LmRaC] The current index has been set to 'my-index'.
+    Index sizes are:
+    RAGdom : my-index (0)
+    RAGexp : my-index-exp (0)
+    ```
 
-  Each index has two parts: 
+   Each index has two parts: 
 
-   - **RAGdom:** the general domain knowledge index for primary material (i.e., PubMed articles)
-   - **RAGexp:** the experiment specific index for secondary material (e.g., saved answers, protocols, background/context knowledge)
+       - **RAGdom:** the general domain knowledge index for primary material (i.e., PubMed articles)
+       - **RAGexp:** the experiment specific index for secondary material (e.g., saved answers, protocols, background/context knowledge)
 
-  b. **Populate the index:* Open the [Indexes Window](#Indexes-Window). If your index is not already selected, click on the radio button next to it.
+   b. *Populate the index:* Open the [Indexes Window](#Indexes-Window). If your index is not already selected, click on the radio button next to it.
 
-![](img/LmRaC_Indexes_Upload.png)
+    ![](img/LmRaC_Indexes_Upload.png)
 
     Click on the upload icon next to your index. Select *exampleIDX* and then click upload. This will embeddings from a pre-built index into your index. The upload should take less than 5 minutes. Press the refresh button periodically to check for completion.
 
@@ -141,41 +141,41 @@ RAGexp : my-index-exp (0)
     **TIP** Build indexes incrementally in smaller chunks. DON'T ask for 100's of references for every pathway, gene or disease. Most answers can be had using only 2 to 5 references. This is especially true of pathways which often have a dozen or more primary references plus secondary citations. Initially, ask for only 2 or 3 secondary citations for each primary. This can end up being 100+ high-quality documents for one pathway, which is more than enough for many questions.
 
 7. **Ask a Question:** Ask a question. LmRaC will analyze the question for any mention of genes, diseases or pathways using its vocabularies (see [Configuration](#Configuration)). It will summarize what it finds as the Search Context. If the index already contains information about any of these items, you will be given the option of updating the index (i.e., searching for more documents). If the index does not include information about one or more item in the question, it will initiate a search of PubMed and populate the index.
-
-```
-[user] What are the most important genes in the KEGG breast cancer pathway?
-[LmRaC] How detailed an answer would you like (1-7)?
-[user] 1
-## Question
-'What are the most important genes in the KEGG breast cancer pathway?'
-Answer complexity: 1
-Analyzing question to determine genes, pathways and diseases...
-
-## Search Context
-Genes : []
-Pathways :
-	hsa05224 : Breast cancer
-		References (curated): [24649067, 27390604, 20436504, 23000897, 22178455, 24596345, 23988612, 22722193, 25907219, 16113099, 24111892, 23702927, 20087430, 24291072, 25544707, 21965336, 26028978, 19088017, 21898546, 11737884, 21076461, 20971825, 26968398, 26040571, 23196196, 23881035, 25013431, 11879567, 15343273]
-Diseases :
-	D001943 : Breast Neoplasms
-## PubMed Search : Diseases
-### Disease MESH ID D001943 : Breast Neoplasms
-[LmRaC] 
-References exist for disease 'Breast Neoplasms'.
-Skip download from PubMed? [Y/n] 
-[user] yes
-## PubMed Search : Pathways
-### Pathway hsa05224 : Breast cancer
-[LmRaC] 
-References exist for pathway 'Breast cancer'.
-Skip download from PubMed? [Y/n] 
-[user] yes
-
-## Answer Question
-Question : What are the most important genes in the KEGG breast cancer pathway?
-
-Determining sub-questions to answer...
-```
+    
+    ```
+    [user] What are the most important genes in the KEGG breast cancer pathway?
+    [LmRaC] How detailed an answer would you like (1-7)?
+    [user] 1
+    ## Question
+    'What are the most important genes in the KEGG breast cancer pathway?'
+    Answer complexity: 1
+    Analyzing question to determine genes, pathways and diseases...
+    
+    ## Search Context
+    Genes : []
+    Pathways :
+    	hsa05224 : Breast cancer
+    		References (curated): [24649067, 27390604, 20436504, 23000897, 22178455, 24596345, 23988612, 22722193, 25907219, 16113099, 24111892, 23702927, 20087430, 24291072, 25544707, 21965336, 26028978, 19088017, 21898546, 11737884, 21076461, 20971825, 26968398, 26040571, 23196196, 23881035, 25013431, 11879567, 15343273]
+    Diseases :
+    	D001943 : Breast Neoplasms
+    ## PubMed Search : Diseases
+    ### Disease MESH ID D001943 : Breast Neoplasms
+    [LmRaC] 
+    References exist for disease 'Breast Neoplasms'.
+    Skip download from PubMed? [Y/n] 
+    [user] yes
+    ## PubMed Search : Pathways
+    ### Pathway hsa05224 : Breast cancer
+    [LmRaC] 
+    References exist for pathway 'Breast cancer'.
+    Skip download from PubMed? [Y/n] 
+    [user] yes
+    
+    ## Answer Question
+    Question : What are the most important genes in the KEGG breast cancer pathway?
+    
+    Determining sub-questions to answer...
+    ```
 
     **TIP** Ask for simple answers first. A complexity of "1" will likely give you a good summary answer from which you can ask more detailed questions. Asking for a "7" will yield a longer answer, but likely with more redundant information.
 
