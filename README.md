@@ -356,7 +356,7 @@ Only one index may be selected at a time.
 
 Especially when first using LmRaC it can be helpful to load embeddings and metadata saved from a previously build index. If any *.idx* files are found in the *indexes/* folder, the upload button will appear next to the current index. Clicking on this will allow you to select any available *.idx* file for upload to the current index. Once a file is selected, click upload. This will load embeddings from the pre-built index to the current index. The upload typically takes about one minute per 1000 paragraph/embedding. Press the refresh button periodically to check for completion. Uploads occur in the background, so you can use LmRaC while the index is uploaded.
     
-    ![](img/LmRaC_Indexes_Upload.png)
+![](img/LmRaC_Indexes_Upload.png)
 
 By default *exampleIDX.idx* is included when first configuring LmRaC. This file indexes nearly 6000 paragraphs from over 100 journal articles on the disease breast cancer ([D001943](https://meshb.nlm.nih.gov/record/ui?ui=D001943)), its associated pathway ([hsa05224](https://www.genome.jp/pathway/hsa05224)), and 10 of the most important genes in breast cancer: [TP53](https://www.genecards.org/cgi-bin/carddisp.pl?gene=TP53), [EGFR](https://www.genecards.org/cgi-bin/carddisp.pl?gene=EGFR), [BRCA1](https://www.genecards.org/cgi-bin/carddisp.pl?gene=BRCA1), [BRCA2](https://www.genecards.org/cgi-bin/carddisp.pl?gene=BRCA2), [CASP8](https://www.genecards.org/cgi-bin/carddisp.pl?gene=CASP8), [CHEK2](https://www.genecards.org/cgi-bin/carddisp.pl?gene=CHEK2), [ERBB4](https://www.genecards.org/cgi-bin/carddisp.pl?gene=ERBB4), [FOXP1](https://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXP1), [CDKN2A](https://www.genecards.org/cgi-bin/carddisp.pl?gene=CDKN2A) and [AKT1](https://www.genecards.org/cgi-bin/carddisp.pl?gene=AKT1).
 
@@ -478,11 +478,11 @@ When a term is not recognized (i.e., no embedding has the identifier as metadata
 
 ### Tips
 
-> **What's Enough?** Do not feel you must populate an index with hundreds of articles. Often, answers require only a few articles. Since searches return results sorted by relevance, it is often sufficient to only download 10 of the best citations to answer most common questions.
+> **What's Enough?** Do not feel you must populate an index with hundreds of articles. Often, answers require only a few articles. Since searches return results sorted by relevance, it is often sufficient to only download 5 of the best citations to answer most common questions. For pathways start with 2 or 3 secondary citations for each of the primary sources. This saves time, money and minimizes rate limits. Build indexes incrementally over time.
 
-> **Pathway References:** When asking a question about pathways in particular, explicitly mention the pathway. For example, "How is smoking related to the NSCLC pathway?" is more likely to reference both the pathway for NSCLC (KEGG [hsa0522](https://www.genome.jp/pathway/hsa05223)) and the disease (MeSH [D002289](https://meshb.nlm.nih.gov/record/ui?ui=D002289)).
+> **Pathway References:** When asking a question about pathways in particular, explicitly mention the pathway. For example, "How is smoking related to the KEGG NSCLC pathway?" is more likely to reference both the pathway for NSCLC (KEGG [hsa0522](https://www.genome.jp/pathway/hsa05223)) and the disease (MeSH [D002289](https://meshb.nlm.nih.gov/record/ui?ui=D002289)).
 
-> **How Detailed?** More detailed answers aren't always better. Since the requested complexity (i.e., detail) determines the number of sub-questions generated, detail should be correlated with the complexity of the question, otherwise LmRaC will likely generate significantly redundant answers. Ask for more detail when there are expected implicit questions in the original question.
+> **How Detailed?** More detailed answers aren't always better. Since the requested complexity (i.e., detail) determines the number of sub-questions generated, detail should be correlated with the complexity of the question, otherwise LmRaC will likely generate significantly redundant answers. Ask for more detail when there are expected implicit questions in the original question. Or, simply make those implicit questions explicit in your question.
 
 ------------------------------------------------------------------------
 
@@ -518,7 +518,7 @@ Creating a context, therefore, means creating a group of documents that provide 
 
 Importantly, one of the strengths of LmRaC is that though it will use this experimental context, it can also search the general literature. Keep this in mind when formulating your questions.
 
-**IMPORTANT** Experiment documents are "authoritative" when asking experimental questions. LmRaC does not implicitly use GPT4 to validate or otherwise confirm the veracity of any document that is uploaded. Therefore, for example, if you upload experiment documents that provide evidence that the world is flat, expect answers to use this "fact." You are the author of your experimental findings!
+> **IMPORTANT** Experiment documents are "authoritative" when asking experimental questions. LmRaC does not implicitly use GPT4 to validate or otherwise confirm the veracity of any document that is uploaded. Therefore, for example, if you upload experiment documents that provide evidence that the world is flat, expect answers to use this "fact." You are the author of your experimental findings!
 
 #### Saving Answers to Experiments
 
@@ -530,7 +530,7 @@ Documents can also be uploaded to experiments manually. Simply ask LmRaC to "loa
 
 Although it is possible to simply copy documents into the experiment's *docs/* folder, embeddings will not be computed, therefore, the documents are not searchable when asking questions about the experiment. Use the "load experiment documents" command to make the document available for search.
 
-**IMPORTANT** Docker containers can only see directories that have been mounted using the **-v** command. This means the path to upload documents is relative to the container's mount point. For example, if you run the LmRaC container with **-v $(pwd)/work:/app/user**, LmRaC can only see folders in the work/ directory tree. These are referenced in the container as */app/user*. So, if you want to load a document from *work/my-docs/experimentInfo.txt*, the full path when using the LmRaC load command would be */app/user/my-docs/experimentInfo.txt*.
+> **IMPORTANT** Docker containers can only see directories that have been mounted using the **-v** command. This means the path to upload documents is relative to the container's mount point. For example, if you run the LmRaC container with **-v $(pwd)/work:/app/user**, LmRaC can only see folders in the work/ directory tree. These are referenced in the container as */app/user*. So, if you want to load a document from *work/my-docs/experimentInfo.txt*, the full path when using the LmRaC load command would be */app/user/my-docs/experimentInfo.txt*.
 
 ### Putting it all together
 
@@ -590,7 +590,7 @@ If you want to try the REST server without building it, a Docker image is availa
 
 Pull the latest tagged image from Docker Hub. Run LmRaC REST using Docker Engine. If Docker is not installed or you're using Docker Desktop, see the [Installation](#Installation) instructions above. This example server does not use any API keys.
 
-**IMPORTANT** you must mount the same local directory as was used for LmRaC otherwise the REST API will be looking in a directory different from LmRaC and will not find the data files it is returning results from. Also, notice that the REST server is on a different port than LmRaC: 5001.
+> **IMPORTANT** you must mount the same local directory as was used for LmRaC otherwise the REST API will be looking in a directory different from LmRaC and will not find the data files it is returning results from. Also, notice that the REST server is on a different port than LmRaC: 5001.
 
 ```         
 docker pull dbcraig/lmracrest:latest
@@ -695,7 +695,7 @@ else:
 
   - **Return values and errors:** All functions must return a string value. This may be free text, structured JSON, or some combination.
 
-**IMPORTANT** If your function needs to return an error, make the error descriptive and helpful to answering any question. To force LmRaC to abandon answering a question due to an error, prefix the return text with **Function Error** followed by the function's name prefixed with **lmrac_**, as follows:
+> **IMPORTANT** If your function needs to return an error, make the error descriptive and helpful to answering any question. To force LmRaC to abandon answering a question due to an error, prefix the return text with **Function Error** followed by the function's name prefixed with **lmrac_**, as follows:
 
 ```
 return "Function Error lmrac_<function-name>  ..."
@@ -705,7 +705,7 @@ return "Function Error lmrac_<function-name>  ..."
 
 To make functions available to LmRaC simply create a function prototype file in the *functions/* folder. The file must end with a *.fn* extension. When LmRaC starts it will read all *.fn* files, compile those that do not have a current *.json* file, and then make those available for loading (recall that functions must be *loaded* once LmRaC has started to be available to answer questions).
 
-**IMPORTANT** Prototype file names *are* case sensitive.
+> **IMPORTANT** Prototype file names *are* case sensitive.
 
 #### Function prototypes
 
@@ -758,7 +758,7 @@ Any error in compilation will be reported during LmRaC intialization. This is no
 
 Once LmRaC has started you may *load* functions to make them available to answer questions. Simply ask LmRaC to load the functions or use the [Functions Window](#Functions-Window). The name of the functions library is the name of the prototypes file. 
 
-**IMPORTANT** Prototype file names *are* case sensitive.
+> **IMPORTANT** Prototype file names *are* case sensitive.
 
 Remember that LmRac chooses functions based on their description. For example, if you ask a question about gene expression in your experiment, LmRaC will look for any functions that describe themselves as "getting gene expression." Describe your functions as accurately and succinctly as possible.
 
