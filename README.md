@@ -8,6 +8,14 @@ LmRaC (Language Model Research Assistant & Collaborator) is an LLM-based web app
 
 LmRaC uses a multi-tier retrieval-augmented generation (RAG) design to index: domain knowledge, experimental context and experimental results. LmRaC is fully data-aware through the use of a user-defined REST API that allows the LLM to ask questions about data and results.
 
+LmRaC has been designed to recognize biological pathways, diseases and gene names and find associated journal articles from [PubMed](https://pubmed.ncbi.nlm.nih.gov/) to answer your questions.
+
+**DISCLAIMER**
+LmRaC is a research project undergoing continuous improvement. As such:
+- We welcome suggests for new features as well as bug reports.
+- Although RAG greatly reduces the chances of hallucinations, fabricated citations and false inferences, these are all still possible. We strongly suggest following citation links to confirm and better understand any underlying inferences to answers.
+- Think of LmRaC as an eager and knowledgeable student who can help you with your research, but still needs some supervision!
+
 ------------------------------------------------------------------------
 
 ## Table of Contents
@@ -77,7 +85,7 @@ When using Docker Desktop, keys are part of the container's Run settings (see [C
 
 2. **OpenAI API Key:** Create an OpenAI API account. Note that this is different from an OpenAI ChatGPT account. The API account allows LmRaC to talk directly to the OpenAI LLM routines. See [OpenAI](#OpenAI) Prerequisites above for details. You will need to add funds to your account. A typical low-complexity answer costs pennies, so starting with a few dollars is more than enough to try LmRaC.
 
-3. **Pinecone API Key:** Create a Pinecone API account. This API allows LmRaC to efficiently save and search indexes of the document knowledge bases you create. See [Pinecone](#Pinecone) Prerequisites above for details. Note that documents are not store in Pinecone, only vector embeddings and metadata are stored. You will need to add funds to your account. Charges are for loading and retrieving embeddings. Loading the example index costs less than 25 cents. Access is typically a few pennies for answers.
+3. **Pinecone API Key:** Create a Pinecone API account. This API allows LmRaC to efficiently save and search indexes of the document knowledge bases you create. See [Pinecone](#Pinecone) Prerequisites above for details. Note that documents are not stored in Pinecone, only vector embeddings and metadata are stored. You will need to add funds to your account. Charges are for loading and retrieving embeddings. Loading the example index costs less than 25 cents. Access is typically a few pennies for answers.
 
 4. **LmRaC Docker Image:** Pull the latest LmRaC image.
 
@@ -89,7 +97,7 @@ When using Docker Desktop, keys are part of the container's Run settings (see [C
     docker run -m1024m -it -e OPENAI_API_KEY=${OPENAI_API_KEY} -e PINECONE_API_KEY=${PINECONE_API_KEY} -v $(pwd)/work:/app/user -v /etc/localtime:etc/localtime:ro -p 5000:5000 dbcraig/lmrac
     ```
 
-   b. *If you're using Docker Desktop:* Open Docker Desktop and search for *dbcraig/lmrac* and then pull the *latest* image. From the Images view click on Run to create Container. Set the container parameters for: ports, volumes and environment variables. Click Run to start the container. See [Installation](#Installation) below for detailed screen shots.
+   b. *If you're using Docker Desktop:* Open Docker Desktop and search for *dbcraig/lmrac* and then pull the *latest* image. From the Images view click on Run to create Container. Set the container parameters for: port, volumes and environment variables. Click Run to start the container. See [Installation](#Installation) below for detailed screen shots.
   
     Note, we recommend 1GB of memory and also mounting */etc/localtime* to insure container time is the same as server time.
 
@@ -105,11 +113,11 @@ When using Docker Desktop, keys are part of the container's Run settings (see [C
 
     The first time you run LmRaC it will use a default configuration. See [Configuration](#Configuration) below for how to customize the configuration. When you quit LmRaC your current configuration is saved to *config/LmRaC.config* in the the mounted directory.
 
-    **TIP:** Use a new window when first starting LmRaC. DO NOT use the browser reload button to restart LmRaC. This can cause synchronization problems between the browser (client) and the Docker container (server). If user questions and answers seem to be out of sync, simply restart the Docker container, and reopen LmRaC in a new window.
+    > **TIP:** Use a new window when first starting LmRaC. DO NOT use the browser reload button to restart LmRaC. This can cause synchronization problems between the browser (client) and the Docker container (server). If user questions and answers seem to be out of sync, simply restart the Docker container, and reopen LmRaC in a new window.
 
 6. **Create an Index:** Since building a knowledge base can take time, start with the loadable example index. 
 
-   a. *Create an Index:* Type *index = my-index* in the user input area. LmRaC will respond with *Index 'my-index' not found. Create new index? [y/N]*  Change the default *no* to *yes* and press enter. LmRaC will ask for an *Index description:* Enter a short description and press enter. After a few seconds LmRaC will respond with the size of the new index.
+   a. *Create an Index:* Type *index = my-index* in the user input area. LmRaC will respond with *Index 'my-index' not found. Create new index? [y/N]*  Change the default *no* to *yes* and press enter. LmRaC will ask for an *Index description:* Enter a short description and press enter. After a few seconds LmRaC will respond with the size of the newly created index.
 
     ```
     [user]  index = my-index
@@ -130,15 +138,15 @@ When using Docker Desktop, keys are part of the container's Run settings (see [C
    - **RAGdom:** the general domain knowledge index for primary material (i.e., PubMed articles)
    - **RAGexp:** the experiment specific index for secondary material (e.g., saved answers, protocols, background/context knowledge)
 
-   b. *Populate the index:* Open the [Indexes Window](#Indexes-Window). If your index is not already selected, click on the radio button next to it. Click on the upload icon next to your index. Select *exampleIDX* and then click upload. This will load embeddings from a pre-built index into your new index. The upload should take less than 5 minutes. Press the refresh button periodically to check for completion.
+   b. *Populate the index:* Open the [Indexes Window](#Indexes-Window). If your index is not already selected, click on the radio button next to it. Click on the upload icon next to your index. Select *exampleIDX* from the dropdown and then click upload. This will load embeddings from a pre-built index to your new index. The upload should take less than 5 minutes. Press the refresh button periodically to check for completion.
     
     ![](img/LmRaC_Indexes_Upload.png)
 
     Note that *exampleIDX.idx* indexes nearly 6000 paragraphs from over 100 journal articles on the disease breast cancer ([D001943](https://meshb.nlm.nih.gov/record/ui?ui=D001943)), its associated pathway ([hsa05224](https://www.genome.jp/pathway/hsa05224)), and 10 of the most important genes in breast cancer: [TP53](https://www.genecards.org/cgi-bin/carddisp.pl?gene=TP53), [EGFR](https://www.genecards.org/cgi-bin/carddisp.pl?gene=EGFR), [BRCA1](https://www.genecards.org/cgi-bin/carddisp.pl?gene=BRCA1), [BRCA2](https://www.genecards.org/cgi-bin/carddisp.pl?gene=BRCA2), [CASP8](https://www.genecards.org/cgi-bin/carddisp.pl?gene=CASP8), [CHEK2](https://www.genecards.org/cgi-bin/carddisp.pl?gene=CHEK2), [ERBB4](https://www.genecards.org/cgi-bin/carddisp.pl?gene=ERBB4), [FOXP1](https://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXP1), [CDKN2A](https://www.genecards.org/cgi-bin/carddisp.pl?gene=CDKN2A) and [AKT1](https://www.genecards.org/cgi-bin/carddisp.pl?gene=AKT1).
 
-    **TIP:** Build indexes incrementally in smaller chunks. DON'T ask for 100's of references for every pathway, gene or disease. Most answers can be had using only 2 to 5 references. This is especially true of pathways which often have a dozen or more primary references plus secondary citations. Initially, ask for only 2 or 3 secondary citations for each primary. This can end up being 100+ high-quality documents for one pathway, which is more than enough for many questions.
-
-7. **Ask a Question:** Ask a question. LmRaC will analyze the question for any mention of genes, diseases or pathways using its vocabularies (see [Configuration](#Configuration)). It will summarize what it finds as the Search Context. If the index already contains information about any of these items, you will be given the option of updating the index (i.e., searching for more documents). If the index does not include information about one or more item in the question, it will initiate a search of PubMed and populate the index.
+    > **TIP:** Build indexes incrementally in smaller chunks. DON'T ask for 100's of references for every pathway, gene or disease. Most answers can be had using only 2 to 5 references. This is especially true of pathways which often have a dozen or more primary references plus secondary citations. Initially, ask for only 2 or 3 secondary citations for each primary. This can end up being 100+ high-quality documents for one pathway, which is more than enough for many questions.
+    
+7. **Ask a Question:** When asked a question LmRaC will analyze the text for any mention of genes, diseases or pathways using its vocabularies (see [Configuration](#Configuration)). It will summarize what it finds as the Search Context. If the index already contains information about any of these items, you will be given the option of updating the index (i.e., searching for more documents). If the index does not include information about one or more item in the question, it will initiate a search of PubMed and populate the index.
     
     ```
     [user] What are the most important genes in the KEGG breast cancer pathway?
@@ -175,19 +183,23 @@ When using Docker Desktop, keys are part of the container's Run settings (see [C
     Determining sub-questions to answer...
     ```
 
-    **TIP:** Ask for simple answers first. A complexity of "1" will likely give you a good summary answer from which you can ask more detailed questions. Asking for a "7" will yield a longer answer, but likely with more redundant information.
+    > **TIP:** Ask for simple answers first. A complexity of "1" will likely give you a good summary answer from which you can ask more detailed questions. Asking for a "7" will yield a longer answer, but likely with more redundant information.
+    
+    > **TIP:** LmRaC uses the LLM to look for pathways, genes and diseases and then matches them against its vocabulary files. This process is not perfect, so you may need to rephrase your question for it to recognized searchable items. Using modifiers like "KEGG", "gene" or "disease" can help cue the language model. For example, instead of saying "in breast cancer," say "in the disease breast cancer" or "in the KEGG breast cancer pathway."
 
 8. **View the Answer:** Answers are displayed during processing and saved in the *sessions/finalAnswers/* directory along with information about the original query, generated sub-queries, references for the answer and a GPT4 assessment of the final answer.
 
-    To view the final answer (and its quality assessment) open the [Answers Window](#Answers-Window) by clicking on the Answers icon of the ([LmRaC Homepage](#LmRaC-Homepage)). From the Answers window answers can be viewed as markdown, HTML, downloaded, and/or saved to experiments as supplemental experiment documents.
+    To view any final answer (and its quality assessment) open the [Answers Window](#Answers-Window) by clicking on the Answers icon of the ([LmRaC Homepage](#LmRaC-Homepage)). From the Answers window answers can be viewed as markdown, HTML, downloaded, and/or saved to experiments as supplemental experiment documents.
+    
+    > **TIP:** Markdown can be "pretty printed" in the browser by installing a browser extension. See [Markdown Viewing](#Markdown-Viewing) for setup details.
 
-9. **Expand your Knowledge:** You can add to your index by asking a question about another gene, pathway or disease. Try it!
+9. **Expand your Knowledge:** You can add to your index by asking a question about another gene, pathway or disease. Try it! Also, keep in mind that you can ask questions about items you haven't explicitly loaded to the index. They just have to be mentioned in what has been loaded. So, as you add to your index, you'll find that there is a significant "add-on" effect that captures related topics and details.
 
 10. **Quitting LmRaC** Exit LmRaC by typing "bye" or "exit" or "adios" in whatever language you prefer. You will be given the option to save your current configuration. The saved configuration includes your current index, experiment and any loaded functions. Once you quit, the Docker container will exit.
 
 ### Next steps
 
-Once you've asked some questions and received answers, you'll probably want to setup experiments into which you can save answers and upload quantitative results. You can then ask questions about your own experimental results! See 
+Once you've asked some questions and received answers, you'll probably want to set up experiments into which you can save answers and upload quantitative results. You can then ask questions about your own experimental results! See 
 [Experiments](#Usage---Experiments) and [Functions](#Usage---User-Defined-Functions) for more details on using the example experiment and functions.
 
 ------------------------------------------------------------------------
@@ -252,8 +264,8 @@ Before running the image set the parameters so that LmRaC has API keys and knows
 A note on terminology: the Docker *image* is a read-only template with all the information needed for creating a running program. An instance of the running program (created from the *image*) is called a *container*. For LmRaC the container is a web server that you can interact with through a browser.
 
 1. **Container name:** (optional) You can give the container (the running program) a name, otherwise Docker Desktop with generate a random name.
-2. **Ports:** Enter a "0" for Docker Desktop to generate a random port on which to find the LmRaC application. Though the LmRaC container runs on port 5000, it doesn't know what port the host machine has available. This allows Docker Desktop to assign an available port and map it LmRaC's internal port (this is analogous to how your local directory is mapped to LmRaC's internal /app/user).
-3. **Volumes (work directory):** Select the path on your host (the machine running Docker Desktop) that you want to be the user root (*/app/user*) for LmRaC. This allows the container to write files to your host (the machine running Docker Desktop). For security, Docker containers are not allowed to access anything on the host machine *unless* you explicitly map (aka mount) a directory into the container.
+2. **Ports:** Enter "5000" for Docker Desktop to assign this port to the running LmRaC application. Though the LmRaC container runs on port 5000 internally, it doesn't know what port the host machine has available. This allows Docker Desktop to map any available port to LmRaC's internal port (this is analogous to how your local directory is mapped to LmRaC's internal /app/user). Alternatively, enter "0" and Docker Desktop will randomly assign an available port. You can then find this in the running container's URL (see below).
+3. **Volumes (work directory):** Select the path on your host (the machine running Docker Desktop) that you want to be the user root (*/app/user*) for LmRaC. This allows the container to write files to your host (the machine running Docker Desktop). For security, Docker containers are not allowed to access anything on the host machine *unless* you explicitly map (aka mount) a directory (aka volume) into the container.
 4. **Volumes (localtime):** (optional) Time in the container is not necessarily the same as time on the host running Docker Desktop. Mapping the */etc/localtime* insures that the timestamp LmRaC uses to name answers and logs is aligned with the time on your Docker Desktop host.
 5. **Environment variables (OpenAI API):** Pass in the literal API key value that LmRaC will use to talk to the OpenAI GPT-4o model.
 6. **Environment variables (Pinecone API):** Pass in the literal API key value that LmRaC will use to talk to the Pinecone vector database.
@@ -268,7 +280,7 @@ You should now see the container you just created running in the Containers view
 1. **Containers view:** Click on Containers to see a list of all containers. This includes running as well as stopped containers. 
 2. **Container URL line:** Since LmRaC is a web application and you specified a Port of "0" as part of the [Run configuration](#Container-settings), you will see a hyperlink created by Docker Desktop to launch LmRaC. Click on this to open the browser to see the [LmRaC Homepage](#LmRaC-Homepage).
 3. **Stop container:** Once you are done running LmRaC you can clean up be stopping the running container. This frees up CPU and memory on the host.
-4. **Delete container:** Stopped containers exist until you delete them since they can be re-started. Note that deleting a container *does not* delete or otherwise affect the image it was created from.
+4. **Delete container:** Stopped containers exist until you delete them since they can be re-started. If you start LmRaC and get a port error, it probably means that another container has already been assigned that port. Also, note that deleting a container *does not* delete or otherwise affect the *image* it was created from.
 
 ------------------------------------------------------------------------
 
@@ -340,6 +352,14 @@ Hovering over the information icon displays the index description, if any, from 
 
 Only one index may be selected at a time.
 
+### Uploading pre-built indexes
+
+Especially when first using LmRaC it can be helpful to load embeddings and metadata saved from a previously build index. If any *.idx* files are found in the *indexes/* folder, the upload button will appear next to the current index. Clicking on this will allow you to select any available *.idx* file for upload to the current index. Once a file is selected, click upload. This will load embeddings from the pre-built index to the current index. The upload typically takes about one minute per 1000 paragraph/embedding. Press the refresh button periodically to check for completion. Uploads occur in the background, so you can use LmRaC while the index is uploaded.
+    
+    ![](img/LmRaC_Indexes_Upload.png)
+
+By default *exampleIDX.idx* is included when first configuring LmRaC. This file indexes nearly 6000 paragraphs from over 100 journal articles on the disease breast cancer ([D001943](https://meshb.nlm.nih.gov/record/ui?ui=D001943)), its associated pathway ([hsa05224](https://www.genome.jp/pathway/hsa05224)), and 10 of the most important genes in breast cancer: [TP53](https://www.genecards.org/cgi-bin/carddisp.pl?gene=TP53), [EGFR](https://www.genecards.org/cgi-bin/carddisp.pl?gene=EGFR), [BRCA1](https://www.genecards.org/cgi-bin/carddisp.pl?gene=BRCA1), [BRCA2](https://www.genecards.org/cgi-bin/carddisp.pl?gene=BRCA2), [CASP8](https://www.genecards.org/cgi-bin/carddisp.pl?gene=CASP8), [CHEK2](https://www.genecards.org/cgi-bin/carddisp.pl?gene=CHEK2), [ERBB4](https://www.genecards.org/cgi-bin/carddisp.pl?gene=ERBB4), [FOXP1](https://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXP1), [CDKN2A](https://www.genecards.org/cgi-bin/carddisp.pl?gene=CDKN2A) and [AKT1](https://www.genecards.org/cgi-bin/carddisp.pl?gene=AKT1).
+
 ------------------------------------------------------------------------
 
 ## Experiments Window
@@ -368,7 +388,7 @@ Available functions are listed with all loaded functions, if any, checked. Load 
 
 Hovering over the information icon displays the function DESCRIPTION, if any, from the function definition file (*.fn*).
 
-Any number of functions may be loaded. However, keep in mind that all loaded functions are passed to GPT4 when asking *any* question. This allows GPT4 to make use of any loaded function when answering a question, but increases the number of input tokens. So, if a function is not needed, do not load it. This improves the accuracy of the answer and reduces cost.
+Any number of functions may be loaded. However, keep in mind that all loaded functions are passed to GPT4 when asking *any* question. This allows GPT4 to make use of any loaded function when answering a question, but increases the number of input tokens. So, if a function is not needed, do not load it. This improves the accuracy of the answer, reduces cost and avoids confusion by incorrectly invoking functions.
 
 ------------------------------------------------------------------------
 
@@ -382,8 +402,8 @@ The Answers window can be opened by clicking on the Answers icon on the [LmRaC H
 2. **Timestamp** shows the date and time of the session an answer was created along with a sequence number for the anwer within that session.
 3. **Question** text shows the original question.
 4. **Answer Summary** can be shown by hovering over the info icon.
-5. **Assessment** of the qualify of a general question (not experiment questions) can be shown by hovering over the ribbon icon.
-6. **MD** button opens the full text of the answer as a markdown document. See [Markdown Viewing](#Markdown-Viewing) for how to setup your browser to automatically display markdown.
+5. **Assessment** of the quality of a general question (not experiment questions) can be shown by hovering over the ribbon icon.
+6. **MD** button opens the full text of the answer as a markdown document. See [Markdown Viewing](#Markdown-Viewing) for how to set up your browser to automatically display markdown.
 7. **HTML** button opens the full text of the answer as an HTML document.
 8. **Test Tube** icon is used to select answers for saving to experiments.
 9. **Download** icon is used to download the full text of the answer as a markdown document.
@@ -396,7 +416,7 @@ Once you select one or more answers (by clicking on the test tube), the answers 
 Click on the test tube next to the answer you want to add. The test tube will be highlighted with a check mark. You may select as many answers as you wish (see Red outline).
 
 1. Select the destination Experiment name (the current experiment, if any, will have an '*' next to its name).
-2. Select the Index for the document embeddings. Remember that these documents will only be searchable when this index set as current.
+2. Select the Index for the document embeddings. Remember that these documents will only be searchable when this index is set as current.
 3. Once both the Experiment and Index have been selected, click on the copy documents icon.
 
 Answers are copied to the experiment *docs/* folder and added to the index (i.e., embeddings computed) in the background. This typically takes less than a minute to complete.
