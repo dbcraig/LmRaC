@@ -73,7 +73,15 @@ When using Docker Desktop, keys are part of the container's Run settings (see [C
 
 ## Quick Start
 
-Pull the latest tagged image from Docker Hub. Run LmRaC using Docker Engine. If Docker is not installed or you're using Docker Desktop, see the [Installation](#Installation) instructions below. You'll need to pass API keys for OpenAI and Pinecone and mount your local directory (e.g., \$pwd) to the LmRaC */app/user* directory. The local directory is where user experiments are found and to where all LmRaC logs and output will be written.
+1. **Docker Installation:** If you don't already have Docker installed see [Installation](#Installation) below for details on how to install it.
+
+2. **OpenAI API Key:** Create an OpenAI API account. Note that this is different from an OpenAI ChatGPT account. The API account allows LmRaC to talk directly to the OpenAI LLM routines. See [OpenAI](#OpenAI) Prerequisites above for details. You will need to add funds to your account. A typical low-complexity answer costs pennies, so starting with a few dollars is more than enough to try LmRaC.
+
+3. **Pinecone API Key:** Create a Pinecone API account. This API allows LmRaC to efficiently save and search indexes of the document knowledge bases you create. Note that documents are not store in Pinecone, only vector embeddings and metadata are stored. You will need to add funds to your account. Charges are for loading and retrieving embeddings. Loading the example costs less than 25 cents. Access is typically a few pennies for answers.
+
+4. **LmRaC Docker Image:** xxx
+
+  a. *If you're using Docker Engine:* From the command line pull the latest lmrac Docker image and run the container.
 
 ```         
 docker pull dbcraig/lmrac:latest
@@ -81,24 +89,40 @@ cd <your-lmrac-root>
 docker run -m1024m -it -e OPENAI_API_KEY=${OPENAI_API_KEY} -e PINECONE_API_KEY=${PINECONE_API_KEY} -v $(pwd)/work:/app/user -v /etc/localtime:etc/localtime:ro -p 5000:5000 dbcraig/lmrac
 ```
 
+  b. *If you're using Docker Desktop:* Open Docker Desktop and search for *dbcraig/lmrac* and then pull the *latest* image. From the Images view click on Run to create Container. Set the container parameters for: ports, volumes and environment variables. Click Run to start the container. See [Installation](#Installation) below for detailed screen shots.
+  
 Note, we recommend 1GB of memory and also mounting */etc/localtime* to insure container time is the same as server time.
 
-Open LmRaC in your browser using *localhost*. For example, <http://localhost:5000> Typically, the port is 5000, but depending on your Docker configuration and what else is running on your host, this may be different (e.g., 55001 for Docker Desktop). The LmRaC homepage will open and LmRaC will initialize. Any problems (e.g., missing keys) will be reported.
+5. **Run LmRaC:**
+
+  a. *If you're using Docker Engine:* Open the web app from you browser. For example: <http://localhost:5000> if you've mapped the container port to 5000.
+  
+  b. *If you're using Docker Desktop:* From the Docker Desktop Container view open the web app using the container's URL hyperlink.
+  
+The LmRaC homepage will open and LmRaC will initialize. Any problems (e.g., missing keys) will be reported.
 
 ![](img/LmRaC_init.png)
 
 The first time you run LmRaC it will use a default configuration. See [Configuration](#Configuration) below for how to customize the configuration. When you quit LmRaC your current configuration is saved to *config/LmRaC.config* in the the mounted directory.
 
-### Creating an Index
+**TIP** Use a new window when first starting LmRaC. DO NOT use the browser reload button to restart LmRaC. This can cause synchronization problems between the browser (client) and the Docker container (server). If user questions and answers seem to be out of sync, simply restart the Docker container, and reopen LmRaC in a new window.
 
-All questions are answered relative to an index of source material. So, set an index in Pinecone to store embeddings of the source articles. If the index does not exist, you'll be asked to create it. LmRaC will indicate how many paragraphs of information are currently stored in the index. Note that the command to set the index is in natural language, so you can ask something like: "Set index to test1" or "index = test1" or anything that indicates you want to set the index.
+6. **Create an Index:** Since building a knowledge base can take time, start with the loadable example index. 
 
-```         
-[user]  set index to test1
-[LmRaC] The current index has been set to 'test1'.
+  a. *Create an Index:* Type *index = my-index* in the user input area. LmRaC will respond with *Index 'my-index' not found. Create new index? [y/N]*  Change the default *no* to *yes* and press enter. LmRaC will ask for an *Index description:* Enter a short description and press enter. After a few seconds LmRaC will respond with the size of the new index.
+
+```
+[user]  index = my-index
+[LmRaC] Calling  functionName: cmd_SET_CURRENT_INDEX
+[LmRaC] Index 'my-index' not found. Create new index? [y/N] 
+[user]  yes
+[LmRaC] Index description:
+[user]  My new index to try LmRaC.
+[LmRaC] Creating new index 'my-index'...
+[LmRaC] The current index has been set to 'my-index'.
 Index sizes are:
-RAGdom : test1 (28810) 
-RAGexp : test1-exp (123) 
+RAGdom : my-index (0)
+RAGexp : my-index-exp (0)
 ```
 
 Each index has two parts: 
@@ -106,51 +130,67 @@ Each index has two parts:
 - **RAGdom:** the general domain knowledge index for primary material (i.e., PubMed articles)
 - **RAGexp:** the experiment specific index for secondary material (e.g., saved answers, protocols, background/context knowledge)
 
-### Asking questions and populating your Index
+  b. **Populate the index:* Open the [Indexes Window](#Indexes-Window). If your index is not already selected, click on the radio button next to it.
 
-Ask a question. LmRaC will analyze the question for any mention of genes, diseases or pathways using its vocabularies (see [Configuration](#Configuration)). It will summarize what it finds as the Search Context. If the index already contains information about any of these items, you will be given the option of updating the index (i.e., searching for more documents). If the index does not include information about one or more item in the question, it will initiate a search of PubMed and populate the index.
+![](img/LmRaC_Indexes_Upload.png)
+
+Click on the upload icon next to your index. Select *exampleIDX* and then click upload. This will embeddings from a pre-built index into your index. The upload should take less than 5 minutes. Press the refresh button periodically to check for completion.
+
+*exampleIDX.idx* indexes nearly 6000 paragraphs from about 130 journal articles on the disease breast cancer ([D001943](https://meshb.nlm.nih.gov/record/ui?ui=D001943)), its associated pathway ([hsa05224](https://www.genome.jp/pathway/hsa05224)), and 10 of the most important genes ([TP53](https://www.genecards.org/cgi-bin/carddisp.pl?gene=TP53), EGFR, BRCA1, BRCA2, CASP8, CHEK2, ERBB4, FOXP1, CDKN2A, AKT1).
+
+**TIP** Build indexes incrementally in smaller chunks. DON'T ask for 100's of references for every pathway, gene or disease. Most answers can be had using only 2 to 5 references. This is especially true of pathways which often have a dozen or more primary references plus secondary citations. Initially, ask for only 2 or 3 secondary citations for each primary. This can end up being 100+ high-quality documents for one pathway, which is more than enough for many questions.
+
+7. **Ask a Question:** Ask a question. LmRaC will analyze the question for any mention of genes, diseases or pathways using its vocabularies (see [Configuration](#Configuration)). It will summarize what it finds as the Search Context. If the index already contains information about any of these items, you will be given the option of updating the index (i.e., searching for more documents). If the index does not include information about one or more item in the question, it will initiate a search of PubMed and populate the index.
 
 ```
-[user]  What is the difference between ESR1 and ESR2?
+[user] What are the most important genes in the KEGG breast cancer pathway?
 [LmRaC] How detailed an answer would you like (1-7)?
-[user]  2
+[user] 1
 ## Question
-'What is the difference between ESR1 and ESR2?'
-Answer complexity: 2
+'What are the most important genes in the KEGG breast cancer pathway?'
+Answer complexity: 1
 Analyzing question to determine genes, pathways and diseases...
 
 ## Search Context
-Genes    : ['ESR1', 'ESR2']
+Genes : []
 Pathways :
+	hsa05224 : Breast cancer
+		References (curated): [24649067, 27390604, 20436504, 23000897, 22178455, 24596345, 23988612, 22722193, 25907219, 16113099, 24111892, 23702927, 20087430, 24291072, 25544707, 21965336, 26028978, 19088017, 21898546, 11737884, 21076461, 20971825, 26968398, 26040571, 23196196, 23881035, 25013431, 11879567, 15343273]
 Diseases :
-## PubMed Search : Genes
-### Gene ESR1
+	D001943 : Breast Neoplasms
+## PubMed Search : Diseases
+### Disease MESH ID D001943 : Breast Neoplasms
 [LmRaC] 
-Would you like to search PubMed for articles related to gene 'ESR1'? [y/N] 
-[user]  yes
+References exist for disease 'Breast Neoplasms'.
+Skip download from PubMed? [Y/n] 
+[user] yes
+## PubMed Search : Pathways
+### Pathway hsa05224 : Breast cancer
+[LmRaC] 
+References exist for pathway 'Breast cancer'.
+Skip download from PubMed? [Y/n] 
+[user] yes
 
-Number of citations for ESR1 = 4275
-[LmRaC] How many citations would you like to download (up to top 100)?
+## Answer Question
+Question : What are the most important genes in the KEGG breast cancer pathway?
 
-[user]  10
-Retrieving document metadata from PubMed
-...
+Determining sub-questions to answer...
 ```
 
-### Viewing Answers
+**TIP** Ask for simple answers first. A complexity of "1" will likely give you a good summary answer from which you can ask more detailed questions. Asking for a "7" will yield a longer answer, but likely with more redundant information.
 
-Answers are displayed during processing and saved in the *sessions/finalAnswers/* directory along with information about the original query, generated sub-queries, references for the answer and a GPT4 assessment of the final answer.
+8. **View the Answer:** Answers are displayed during processing and saved in the *sessions/finalAnswers/* directory along with information about the original query, generated sub-queries, references for the answer and a GPT4 assessment of the final answer.
 
 To view the final answer (and its quality assessment) open the [Answers Window](#Answers-Window) by clicking on the Answers icon of the ([LmRaC Homepage](#LmRaC-Homepage)). From the Answers window answers can be viewed as markdown, HTML, downloaded, and/or saved to experiments as supplemental experiment documents.
 
-### Quitting LmRaC
+9. **Expand your Knowledge:** You can add to your index by asking a question about another gene, pathway or disease. Try it!
 
-Exit LmRaC by typing "bye" or "exit" or "adios" in whatever language you prefer. You will be given the option to save your current configuration. The saved configuration includes your current index, experiment and any loaded functions. Once you quit the Docker container will exit.
+10. **Quitting LmRaC** Exit LmRaC by typing "bye" or "exit" or "adios" in whatever language you prefer. You will be given the option to save your current configuration. The saved configuration includes your current index, experiment and any loaded functions. Once you quit the Docker container will exit.
 
 ### Next steps
 
 Once you've asked some questions and received answers, you'll probably want to setup experiments into which you can save answers and upload quantitative results. You can then ask questions about your own experimental results! See 
-[Experiments](#Usage---Experiments) and [Functions](#Usage---User-Defined-Functions) for more details.
+[Experiments](#Usage---Experiments) and [Functions](#Usage---User-Defined-Functions) for more details on using the example experiment and functions.
 
 ------------------------------------------------------------------------
 
