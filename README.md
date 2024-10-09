@@ -147,7 +147,7 @@ When using Docker Desktop, keys are part of the container's Run settings (see [C
 
     > **TIP:** Build indexes incrementally in smaller chunks. DON'T ask for 100's of references for every pathway, gene or disease. Most answers can be had using only 2 to 5 references. This is especially true of pathways which often have a dozen or more primary references plus secondary citations. Initially, ask for only 2 or 3 secondary citations for each primary. This can end up being 100+ high-quality documents for one pathway, which is more than enough for many questions.
     
-7. **Ask a Question:** When asked a question LmRaC will analyze the text for any mention of genes, diseases or pathways using its vocabularies (see [Configuration](#Configuration)). It will summarize what it finds as the Search Context. If the index already contains information about any of these items, you will be given the option of updating the index (i.e., searching for more documents). If the index does not include information about one or more item in the question, it will initiate a search of PubMed and populate the index.
+7. **Ask a Question:** When asked a question LmRaC will analyze the text for any mention of genes, diseases or pathways using its vocabularies (see [Configuration](#Configuration)). It will also compose a general PubMed query for the whole question to capture articles mentioning all or some of the terms. It will summarize what it finds as the Search Context. If the index already contains information about any of these items, you will be given the option of updating the index (i.e., searching for more documents). If the index does not include information about one or more item in the question, it will initiate a search of PubMed and populate the index.
     
     ```
     [user] What are the most important genes in the KEGG breast cancer pathway?
@@ -177,6 +177,13 @@ When using Docker Desktop, keys are part of the container's Run settings (see [C
     References exist for pathway 'Breast cancer'.
     Skip download from PubMed? [Y/n] 
     [user] yes
+	## PubMed Search : Based on whole question
+    Query: ("KEGG breast cancer pathway" OR "breast cancer pathway" OR "breast neoplasms pathway") AND ("important genes" OR "key genes" OR "critical genes" OR "significant genes")
+    Returning IDs for 50 of 180 search results.
+    [LmRaC] 
+    References (3) exist for this general search.
+    Skip download from PubMed? [Y/n]
+	[user] yes
     
     ## Answer Question
     Question : What are the most important genes in the KEGG breast cancer pathway?
@@ -469,6 +476,8 @@ The **index** is the vector database used to search for related information. LmR
 
 Questions are evaluated to determine what, if any, genes, diseases and/or pathways are explicitly -- or, in some cases, implicitly -- mentioned. Identified terms are then matched against vocabulary lists for each type to associate terms with unique identifiers which can then be used as metadata for subsequent searches.
 
+LmRaC will also generate a compound PubMed query using multiple terms and their synonyms. This search is meant to find journal articles more specific to the context of your question.
+
 The detail of an answer is determined by a number between 1 and 7 with 1 answering the question only. Detail of 2-7 generated sub-questions related (in the opinion of GPT4) to the original question. Once the original question and all sub-questions have been answered, they are edited into a single final answer along with paragraph level citations to all sources used in answering the question.
 
 Feedback is also provided by GPT4 on the accuracy and completeness of the answer.
@@ -482,6 +491,8 @@ When a term is not recognized (i.e., no embedding has the identifier as metadata
 > **What's Enough?** Do not feel you must populate an index with hundreds of articles. Often, answers require only a few articles. Since searches return results sorted by relevance, it is often sufficient to only download 5 of the best citations to answer most common questions. For pathways start with 2 or 3 secondary citations for each of the primary sources. This saves time, money and minimizes rate limits. Build indexes incrementally over time.
 
 > **Pathway References:** When asking a question about pathways in particular, explicitly mention the pathway. For example, "How is smoking related to the KEGG NSCLC pathway?" is more likely to reference both the pathway for NSCLC (KEGG [hsa0522](https://www.genome.jp/pathway/hsa05223)) and the disease (MeSH [D002289](https://meshb.nlm.nih.gov/record/ui?ui=D002289)).
+
+> **Narrowing Context:** Since LmRaC also generates a compound query based on the whole question, make sure to include other context cues (i.e., not just genes and disease) that will help capture journal articles relevant to your particular experiment.
 
 > **How Detailed?** More detailed answers aren't always better. Since the requested complexity (i.e., detail) determines the number of sub-questions generated, detail should be correlated with the complexity of the question, otherwise LmRaC will likely generate significantly redundant answers. Ask for more detail when there are expected implicit questions in the original question. Or, simply make those implicit questions explicit in your question.
 
