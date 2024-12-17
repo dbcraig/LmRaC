@@ -820,7 +820,7 @@ Likewise, functions are designed to manipulate your data (e.g., read, search, co
 
 ## How To Cite
 
-*Coming Soon!* Currently under review.
+Douglas B Craig, Sorin Drăghici, LmRaC: a functionally extensible tool for LLM interrogation of user experimental results, *Bioinformatics*, Volume 40, Issue 12, December 2024, btae679, https://doi.org/10.1093/bioinformatics/btae679
 
 ## Contact
 
